@@ -16,7 +16,13 @@ class ImagePublisherNode(Node):
 
     def publish_image(self):
         # Load a sample image (or you can use camera input here)
-        image = cv2.imread('cat.jpg')  # Replace with your image path
+        image = cv2.imread('/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/obj_detector_ai/obj_detector_ai/cat.jpg')  # Replace with your image path
+        if image is None:
+            self.get_logger().error("Could not load 'cat.jpg'")
+            return
+
+        cv2.imshow("test", image)
+        cv2.waitKey(1)  # This allows OpenCV to update the window
 
         # Convert the OpenCV image to a ROS message
         ros_image = self.bridge.cv2_to_imgmsg(image, "bgr8")

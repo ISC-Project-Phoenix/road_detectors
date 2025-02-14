@@ -11,7 +11,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools','opencv-python','cv_bridge','torch'],
     zip_safe=True,
     maintainer='andy',
     maintainer_email='Andrew@Ealovega.dev',
@@ -20,7 +20,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'obj_detector_ai = obj_detector_ai.obj_detector_ai:main'
+            'obj_detector_ai = obj_detector_ai.obj_detector_ai:main',
+            'image_publisher_node = obj_detector_ai.image_publisher_node:main',
+            'yolo_subscriber_node = obj_detector_ai.yolo_subscriber_node:main',
+
         ],
     },
 )

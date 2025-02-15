@@ -21,7 +21,7 @@ class ImagePublisherNode(Node):
             self.get_logger().error("Could not load 'cat.jpg'")
             return
 
-        cv2.imshow("test", image)
+        #cv2.imshow("test", image)
         cv2.waitKey(1)  # This allows OpenCV to update the window
 
         # Convert the OpenCV image to a ROS message

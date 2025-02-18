@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'obj_detector_ai = obj_detector_ai.obj_detector_ai:main',
             'image_publisher_node1 = obj_detector_ai.image_publisher_node1:main',
+
             'yolo_subscriber_node = obj_detector_ai.yolo_subscriber_node:main',
 
         ],

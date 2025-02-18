@@ -1,0 +1,48 @@
+[1.420s] Invoking command in '/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/obj_detector_ai': PYTHONPATH=/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/prefix_override:/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../build/obj_detector_ai build --build-base /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build install --record /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log --single-version-externally-managed install_data
+[1.783s] running egg_info
+[1.783s] creating ../build/obj_detector_ai/obj_detector_ai.egg-info
+[1.783s] writing ../build/obj_detector_ai/obj_detector_ai.egg-info/PKG-INFO
+[1.784s] writing dependency_links to ../build/obj_detector_ai/obj_detector_ai.egg-info/dependency_links.txt
+[1.784s] writing entry points to ../build/obj_detector_ai/obj_detector_ai.egg-info/entry_points.txt
+[1.784s] writing requirements to ../build/obj_detector_ai/obj_detector_ai.egg-info/requires.txt
+[1.784s] writing top-level names to ../build/obj_detector_ai/obj_detector_ai.egg-info/top_level.txt
+[1.784s] writing manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+[1.786s] reading manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+[1.787s] writing manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+[1.788s] running build
+[1.788s] running build_py
+[1.788s] creating /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build
+[1.788s] creating /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib
+[1.788s] creating /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[1.788s] copying obj_detector_ai/image_publisher_node.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[1.788s] copying obj_detector_ai/image_publisher_node1.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[1.789s] copying obj_detector_ai/yolo_subscriber_node.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[1.804s] copying obj_detector_ai/__init__.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[1.805s] copying obj_detector_ai/obj_detector_ai.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[1.823s] running install
+[1.824s] running install_lib
+[1.824s] creating /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[1.825s] copying /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/image_publisher_node.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[1.825s] copying /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/image_publisher_node1.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[1.825s] copying /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/yolo_subscriber_node.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[1.825s] copying /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/__init__.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[1.825s] copying /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/obj_detector_ai.py -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[1.826s] byte-compiling /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/image_publisher_node.py to image_publisher_node.cpython-310.pyc
+[1.827s] byte-compiling /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/image_publisher_node1.py to image_publisher_node1.cpython-310.pyc
+[1.827s] byte-compiling /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/yolo_subscriber_node.py to yolo_subscriber_node.cpython-310.pyc
+[1.828s] byte-compiling /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/__init__.py to __init__.cpython-310.pyc
+[1.828s] byte-compiling /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/obj_detector_ai.py to obj_detector_ai.cpython-310.pyc
+[1.828s] running install_data
+[1.828s] creating /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index
+[1.829s] creating /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index
+[1.829s] creating /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index/packages
+[1.829s] copying resource/obj_detector_ai -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index/packages
+[1.829s] copying package.xml -> /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai
+[1.829s] running install_egg_info
+[1.832s] Copying ../build/obj_detector_ai/obj_detector_ai.egg-info to /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai-0.0.0-py3.10.egg-info
+[1.833s] running install_scripts
+[1.867s] Installing image_publisher_node1 script to /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[1.868s] Installing obj_detector_ai script to /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[1.868s] Installing yolo_subscriber_node script to /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[1.868s] writing list of installed files to '/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log'
+[1.913s] Invoked command in '/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/obj_detector_ai' returned '0': PYTHONPATH=/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/prefix_override:/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../build/obj_detector_ai build --build-base /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build install --record /home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log --single-version-externally-managed install_data

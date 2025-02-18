@@ -1,4 +1,0 @@
-[0.000000] (-) TimerEvent: {}
-[0.000540] (-) JobUnselected: {'identifier': 'obj_detector_ai'}
-[0.000717] (-) JobUnselected: {'identifier': 'obj_detector_cv'}
-[0.000755] (-) EventReactorShutdown: {}

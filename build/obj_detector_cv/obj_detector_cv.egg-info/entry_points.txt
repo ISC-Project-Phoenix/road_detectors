@@ -1,3 +1,0 @@
-[console_scripts]
-obj_detector_cv = obj_detector_cv.obj_detector_cv:main
-

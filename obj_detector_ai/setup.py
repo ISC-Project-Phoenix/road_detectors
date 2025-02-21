@@ -21,9 +21,11 @@ setup(
     entry_points={
         'console_scripts': [
             'obj_detector_ai = obj_detector_ai.obj_detector_ai:main',
-            'image_publisher_node1 = obj_detector_ai.image_publisher_node1:main',
-
+            'image_publisher_node = obj_detector_ai.image_publisher_node:main',
+            'image_publisher_nodeTest = obj_detector_ai.image_publisher_nodeTest:main',
             'yolo_subscriber_node = obj_detector_ai.yolo_subscriber_node:main',
+            'yolo_subscriber_node_new = obj_detector_ai.yolo_subscriber_node_new:main',
+            'yolo_publisher_node = obj_detector_ai.yolo_publisher_node:main',
 
         ],
     },

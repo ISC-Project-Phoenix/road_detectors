@@ -1,12 +1,13 @@
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 from std_msgs.msg import Float32MultiArray
 from cv_bridge import CvBridge
 import cv2
 from ultralytics import YOLO
 import numpy as np
 import time
+
 
 class YoloSubscriberNode(Node):
     def __init__(self):
@@ -31,13 +32,18 @@ class YoloSubscriberNode(Node):
 
         # ROS2 Image Subscriber (input frames)
 
+       # self.it = ImageTransport(self)
 
         # ROS2 Image Publisher (processed output)
-        #self.publisher = self.create_publisher(Image, 'processed_frames', 10)
+       # self.publisher = self.create_publisher(Image, 'processed_frames', 10)
         self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 5)
-        self.subscription = self.create_subscription(Image, '/camera/mid/rgb',self.image_callback, 10
-        )
 
+        # TODO: Figure out how to subscribe correctly to compressed image
+        self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
+        #self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
+
+        # this one publishes the video in this repo
+        #self.subscription = self.create_subscription(Image, '/video_frames' ,self.image_callback, 10)
 
         # OpenCV Bridge
         self.bridge = CvBridge()
@@ -47,7 +53,13 @@ class YoloSubscriberNode(Node):
 
     def listener_callback(self, msg):
 
-        frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+        # Convert compressed image data to a numpy array
+        np_arr = np.frombuffer(msg.data, np.uint8)
+
+        # Decode the numpy array to an OpenCV image
+        frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+        #frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
         #start = self.get_clock().now().to_msg().sec_nanosec  # Start time
 
         results = self.model(frame)

@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import CompressedImage
+from sensor_msgs.msg import Image
 from std_msgs.msg import Float32MultiArray
 from cv_bridge import CvBridge
 import cv2
@@ -35,12 +36,15 @@ class YoloSubscriberNode(Node):
        # self.it = ImageTransport(self)
 
         # ROS2 Image Publisher (processed output)
-       # self.publisher = self.create_publisher(Image, 'processed_frames', 10)
+        self.publisher = self.create_publisher(Image, 'processed_frames', 10)
         self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 5)
 
         # TODO: Figure out how to subscribe correctly to compressed image
         self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
         #self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
+
+        self.subscription = self.create_subscription(Image,  '/camera/mid/rgb/image_color', self.image_callback, 10)
+
 
         # this one publishes the video in this repo
         #self.subscription = self.create_subscription(Image, '/video_frames' ,self.image_callback, 10)
@@ -130,7 +134,7 @@ class YoloSubscriberNode(Node):
         frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
         frame_height, frame_width, _ = frame.shape
 
-        # Crop the bottom 40% of the frame
+        # Crop to the bottom 45% of the frame
         crop_y_start = int(frame_height * 0.45)
         cropped_frame = frame[crop_y_start:, :]
 

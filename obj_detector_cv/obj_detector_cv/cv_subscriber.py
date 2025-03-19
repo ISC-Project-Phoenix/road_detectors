@@ -11,7 +11,7 @@ import time
 from cv_backend import process_videos
 
 
-class cv_subscriber_node(Node):
+class CVsubscriberNode(Node):
     def __init__(self):
         super().__init__('cv_subscriber')
 
@@ -144,7 +144,7 @@ class cv_subscriber_node(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    cv_subscriber_node = cv_subscriber()
+    cv_subscriber_node = CVsubscriberNode()
     rclpy.spin(cv_subscriber_node)
     cv_subscriber_node.destroy_node()
     rclpy.shutdown()

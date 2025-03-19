@@ -34,7 +34,7 @@ class CVsubscriberNode(Node):
         # OpenCV Bridge
         self.bridge = CvBridge()
 
-        self.get_logger().info("Lane Detection Node Started.")
+        self.get_logger().info("OpenCV Detection Node Started.")
 
 
     def listener_callback(self, msg):
@@ -109,37 +109,9 @@ class CVsubscriberNode(Node):
         self.poly_coeff_publisher.publish(coeff_msg)
 
         # Log the coefficients
-        self.get_logger().info(f"Published Polynomial Coefficients: {smoothed_coeff}")
+        self.get_logger().info(f"Published Polynomial Coefficients: {poly_coeff_cv}")
 
-        # Fit polynomials
-        # left_poly_func, self.smoothed_left_poly_coeff = self.fit_polynomial(left_points, self.smoothed_left_poly_coeff)
-        # center_poly_func, self.smoothed_center_poly_coeff = self.fit_polynomial(center_points, self.smoothed_center_poly_coeff)
-        # right_poly_func, self.smoothed_right_poly_coeff = self.fit_polynomial(right_points, self.smoothed_right_poly_coeff)
-
-        """
-        # Overlay output
-        overlay = cropped_frame.copy()
-        for y in range(0, binary_mask.shape[0]):
-            if left_poly_func:
-                x_left = int(left_poly_func(y))
-                if 0 <= x_left < binary_mask.shape[1]:
-                    cv2.circle(overlay, (x_left, y), 2, self.left_color, -1)
-            if center_poly_func:
-                x_center = int(center_poly_func(y))
-                if 0 <= x_center < binary_mask.shape[1]:
-                    cv2.circle(overlay, (x_center, y), 2, self.center_color, -1)
-            if right_poly_func:
-                x_right = int(right_poly_func(y))
-                if 0 <= x_right < binary_mask.shape[1]:
-                    cv2.circle(overlay, (x_right, y), 2, self.right_color, -1)
-        """
-        # Display FPS
-        fps_text = f'{1/(end - start):.2f} FPS'
-        cv2.putText(overlay, fps_text, (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 1)
-
-        # Convert to ROS2 Image message and publish
-        ros_image = self.bridge.cv2_to_imgmsg(overlay, encoding="bgr8")
-        self.publisher.publish(ros_image)
+        
 
 
 def main(args=None):

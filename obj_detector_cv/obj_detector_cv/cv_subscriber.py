@@ -8,28 +8,14 @@ import cv2
 from ultralytics import YOLO
 import numpy as np
 import time
+from cv_backend import process_videos
 
 
-class YoloSubscriberNode(Node):
+class cv_subscriber(Node):
     def __init__(self):
-        super().__init__('yolo_subscriber_node')
+        super().__init__('cv_subscriber')
 
-        # **
-        # (Substitute with your trained YOLO model)
-        # **
-        self.model = YOLO('/home/redtoo/Documents/ws_phnx/src/road_detectors/obj_detector_cv/obj_detector_cv/cv_backend.py')  # Example: '/home/user/best.pt'
-        self.model.conf = 0.80  # Confidence threshold
 
-        # Define drawing colors in BGR format
-        self.left_color = (255, 0, 0)    # Blue for left boundary
-        self.center_color = (0, 255, 0)  # Green for centerline
-        self.right_color = (0, 0, 255)   # Red for right boundary
-
-        # Define smoothing parameters
-        self.alpha = 0.2
-        self.smoothed_left_poly_coeff = None
-        self.smoothed_center_poly_coeff = None
-        self.smoothed_right_poly_coeff = None
 
         # ROS2 Image Subscriber (input frames)
 
@@ -83,7 +69,7 @@ class YoloSubscriberNode(Node):
 
         frame = cv2.addWeighted(overlay, 0.5, frame, 0.5, 0)
 
-        # Display FPS
+        # Display FPSframe
         #cv2.putText(frame, f'{fps:.2f} FPS', (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 1)
 
         # Convert back to ROS2 Image message and publish
@@ -138,34 +124,25 @@ class YoloSubscriberNode(Node):
         crop_y_start = int(frame_height * 0.45)
         cropped_frame = frame[crop_y_start:, :]
 
-        # Run YOLO segmentation
+        # Run CV function
         start = time.time()
-        results = self.model(cropped_frame)
+        poly_coeff_cv = process_videos(frame)
         end = time.time()
 
-        binary_mask = np.zeros(cropped_frame.shape[:2], dtype=np.uint8)
+        # Create a ROS2 message and publish coefficients
+        coeff_msg = Float32MultiArray()
+        coeff_msg.data = poly_coeff_cv.tolist()
+        self.poly_coeff_publisher.publish(coeff_msg)
 
-        # Process each detection result from YOLO
-        for result in results:
-            if result.masks is not None:
-                for mask, cls in zip(result.masks.xy, result.boxes.cls):
-                    points = np.array(mask, dtype=np.int32)
-                    if int(cls) == 0 and points.shape[0] >= 3:  # Process class 0 ("Road")
-                        points = points.reshape((-1, 1, 2))
-                        cv2.fillPoly(binary_mask, [points], 255)
-
-        # Morphological closing to refine the mask
-        kernel = np.ones((5, 5), np.uint8)
-        binary_mask = cv2.morphologyEx(binary_mask, cv2.MORPH_CLOSE, kernel)
-
-        # Extract boundary points
-        left_points, center_points, right_points = self.get_boundary_points(binary_mask, step=5)
+        # Log the coefficients
+        self.get_logger().info(f"Published Polynomial Coefficients: {smoothed_coeff}")
 
         # Fit polynomials
-        left_poly_func, self.smoothed_left_poly_coeff = self.fit_polynomial(left_points, self.smoothed_left_poly_coeff)
-        center_poly_func, self.smoothed_center_poly_coeff = self.fit_polynomial(center_points, self.smoothed_center_poly_coeff)
-        right_poly_func, self.smoothed_right_poly_coeff = self.fit_polynomial(right_points, self.smoothed_right_poly_coeff)
+        # left_poly_func, self.smoothed_left_poly_coeff = self.fit_polynomial(left_points, self.smoothed_left_poly_coeff)
+        # center_poly_func, self.smoothed_center_poly_coeff = self.fit_polynomial(center_points, self.smoothed_center_poly_coeff)
+        # right_poly_func, self.smoothed_right_poly_coeff = self.fit_polynomial(right_points, self.smoothed_right_poly_coeff)
 
+        """
         # Overlay output
         overlay = cropped_frame.copy()
         for y in range(0, binary_mask.shape[0]):
@@ -181,7 +158,7 @@ class YoloSubscriberNode(Node):
                 x_right = int(right_poly_func(y))
                 if 0 <= x_right < binary_mask.shape[1]:
                     cv2.circle(overlay, (x_right, y), 2, self.right_color, -1)
-
+        """
         # Display FPS
         fps_text = f'{1/(end - start):.2f} FPS'
         cv2.putText(overlay, fps_text, (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 1)
@@ -193,9 +170,9 @@ class YoloSubscriberNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    yolo_subscriber_node = YoloSubscriberNode()
-    rclpy.spin(yolo_subscriber_node)
-    yolo_subscriber_node.destroy_node()
+    cv_subscriber_node = cv_subscriber()
+    rclpy.spin(cv_subscriber_node)
+    cv_subscriber_node.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':

@@ -1,10 +1,11 @@
 import cv2
 import numpy as np
-import os
-from tkinter import Tk
-from tkinter.filedialog import askopenfilename
+# import os
+from tkinter import Tk  # this is for selecting files we dont need it 
+from tkinter.filedialog import askopenfilename  # ^
 
 # Function to open a file dialog for video selection
+# we shouldnt be using this!
 def open_file_dialog(initial_dir, file_types=[("MP4 files", "*.mp4"), ("All files", "*.*")]):
     """Opens a file dialog using Tkinter to select a video file.
 
@@ -22,6 +23,7 @@ def open_file_dialog(initial_dir, file_types=[("MP4 files", "*.mp4"), ("All file
     return file_path  # Return the selected file path
 
 # Function to mask green color to black in an HSV frame
+# nesscary
 def mask_green_to_black(hsv_frame, lower_green, upper_green):
     """Masks green pixels in an HSV frame and replaces them with black.
 
@@ -40,6 +42,7 @@ def mask_green_to_black(hsv_frame, lower_green, upper_green):
     return result_frame, green_mask  # Return the masked frame and the mask
 
 # Function to fit a polynomial to a set of points
+# very useful!
 def fit_polynomial(points, order=3):
     """Fits a polynomial of a given order to a set of points.
 
@@ -64,16 +67,14 @@ def nothing(x):
     pass  # Does nothing
 
 # Function to process the video(s)
-def process_videos(video_paths):
+# TODO process return image!
+def process_videos(frame):
     """Processes the video(s) to detect lane lines.
 
     Args:
         video_paths: A list of paths to the video files.
     """
-    caps = [cv2.VideoCapture(path) for path in video_paths]  # Open the video files
-    if not all(cap.isOpened() for cap in caps):  # Check if all videos opened successfully
-        print("Error: Could not open one or more videos.")
-        return  # Exit if videos could not be opened
+    # TODO Rework for cv::Images!
 
     # Create a window for displaying the output stages
     cv2.namedWindow("Output Stages", cv2.WINDOW_NORMAL)
@@ -92,15 +93,21 @@ def process_videos(video_paths):
 
     paused = False  # Initialize pause flag
 
-    # while True:  # Main loop for processing frames
+    """
+    TODO:
+        remove while loop from scope. 
+        remove for loop for video frames
+        convert all frames into single use!
+    """
+    if True:  # Main loop for processing frames
         if true:  # Process frames only if not paused
-            for i, cap in enumerate(caps):  # Iterate through each video capture
-                ret, frame = cap.read()  # Read a frame from the video
-                if not ret:  # If no frame was read (end of video)
-                    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Reset the video to the beginning
-                    ret, frame = cap.read()  # Read the first frame again
-
+            if true:  # Iterate through each video capture
+                # resize frame!
                 frame_resized = cv2.resize(frame, (640, 480))  # Resize the frame for processing
+
+
+                # from function header
+                frame_resized = cv2.resize(frame, (640, 480))  # Resize the frame for processing, must match the camera frame. 
                 height, width = frame_resized.shape[:2]  # Get the height and width of the frame
 
                 hsv_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2HSV)  # Convert the frame to HSV
@@ -240,7 +247,9 @@ def process_videos(video_paths):
                 cv2.imshow("Green Mask", green_mask)
                 cv2.imshow("Closed Edges", closed_edges)  # Edges after closing
                 cv2.imshow("roi_edges", roi_edges)
-
+        # end if frame is valid code 
+"""
+        # this appears to be switching video feeds?
         key = cv2.waitKey(25)
 
         if key == ord('q'):
@@ -268,7 +277,7 @@ def process_videos(video_paths):
         elif key == ord('l'):  # Jump forward
             current_frame = caps[0].get(cv2.CAP_PROP_POS_FRAMES)
             caps[0].set(cv2.CAP_PROP_POS_FRAMES, min(caps[0].get(cv2.CAP_PROP_FRAME_COUNT) - 1, current_frame + 100))
-    # end wiveo loop
+    # end while true loop
 
     for cap in caps:
         cap.release()
@@ -284,3 +293,4 @@ if video_path:
     process_videos(video_paths)
 else:
     print("No video selected.")
+"""

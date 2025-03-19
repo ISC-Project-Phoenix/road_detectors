@@ -1,3 +1,5 @@
+"""
+
 import rclpy
 from rclpy.node import Node
 import cv2
@@ -45,3 +47,5 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
+"""

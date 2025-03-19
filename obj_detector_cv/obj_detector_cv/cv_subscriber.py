@@ -11,7 +11,7 @@ import time
 from cv_backend import process_videos
 
 
-class cv_subscriber(Node):
+class cv_subscriber_node(Node):
     def __init__(self):
         super().__init__('cv_subscriber')
 
@@ -22,7 +22,7 @@ class cv_subscriber(Node):
        # self.it = ImageTransport(self)
 
         # ROS2 Image Publisher (processed output)
-        self.publisher = self.create_publisher(Image, 'processed_frames', 10)
+        #self.publisher = self.create_publisher(Image, 'processed_frames', 10)
         self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 5)
 
         # TODO: Figure out how to subscribe correctly to compressed image
@@ -30,10 +30,6 @@ class cv_subscriber(Node):
         #self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
 
         self.subscription = self.create_subscription(Image,  '/camera/mid/rgb/image_color', self.image_callback, 10)
-
-
-        # this one publishes the video in this repo
-        #self.subscription = self.create_subscription(Image, '/video_frames' ,self.image_callback, 10)
 
         # OpenCV Bridge
         self.bridge = CvBridge()
@@ -76,24 +72,6 @@ class cv_subscriber(Node):
         ros_image = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
         self.publisher.publish(ros_image)
 
-    def get_boundary_points(self, binary_mask, step=5):
-        """
-        Extract left, center, and right boundary points from a binary mask.
-        """
-        left_points, center_points, right_points = [], [], []
-        h, w = binary_mask.shape
-        for y in range(0, h, step):
-            x_coords = np.where(binary_mask[y, :] > 0)[0]
-            if x_coords.size > 0:
-                left_x = x_coords[0]
-                right_x = x_coords[-1]
-                center_x = int((left_x + right_x) / 2)
-                left_points.append((left_x, y))
-                center_points.append((center_x, y))
-                right_points.append((right_x, y))
-        return np.array(left_points), np.array(center_points), np.array(right_points)
-
-    def fit_polynomial(self, points, smoothed_coeff):
         if points.shape[0] >= 3:
             try:
                 poly_coeff = np.polyfit(points[:, 1], points[:, 0], deg=2)  # Fit a 2nd-degree polynomial
@@ -119,10 +97,6 @@ class cv_subscriber(Node):
         """Process frames from ROS2 topic."""
         frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
         frame_height, frame_width, _ = frame.shape
-
-        # Crop to the bottom 45% of the frame
-        crop_y_start = int(frame_height * 0.45)
-        cropped_frame = frame[crop_y_start:, :]
 
         # Run CV function
         start = time.time()

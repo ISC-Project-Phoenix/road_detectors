@@ -54,7 +54,7 @@ class YoloSubscriberNode(Node):
 
         self.get_logger().info("Lane Detection Node Started.")
 
-
+    # for the publisher node DONT USE
     def listener_callback(self, msg):
 
         # Convert compressed image data to a numpy array
@@ -129,9 +129,11 @@ class YoloSubscriberNode(Node):
                 self.get_logger().warn(f"Polynomial fitting error: {e}")
         return None, smoothed_coeff
 
+    # for the ROS2 frames. 
     def image_callback(self, msg):
         """Process frames from ROS2 topic."""
         frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+        # unnesscary for CV
         frame_height, frame_width, _ = frame.shape
 
         # Crop to the bottom 45% of the frame

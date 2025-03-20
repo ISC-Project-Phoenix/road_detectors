@@ -20,10 +20,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'obj_detector_cv = obj_detector_cv.obj_detector_cv:main'
-            'cv_subscriber = obj_detector_cv.cv_subscriber_node:main'
-            'cv_subscriber = obj_detector_cv.cv_backend:main'
-            'cv_subscriber = obj_detector_cv.cv_subscriber_node:main'
+            'obj_detector_cv = obj_detector_cv.obj_detector_cv:main',
+            'cv_subscriber = obj_detector_cv.cv_subscriber_node:main',
+            'cv_subscriber = obj_detector_cv.cv_backend:main',
+            'cv_subscriber = obj_detector_cv.cv_subscriber_node:main',
         ],
     },
 )

@@ -58,20 +58,22 @@ def process_videos(frame):
     """
     # TODO Rework for cv::Images!
 
-    # Create a window for displaying the output stages
-    cv2.namedWindow("Output Stages", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("Output Stages", 1920, 720)  # Resize the window
+    # Create a window for displaying the Processing Stages
+    cv2.namedWindow("Processing Stages", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Processing Stages", 1920, 720)  # Resize the window
+
 
     # Create trackbars for controlling the lower and upper bounds of the green color
-    cv2.createTrackbar("Lower H", "Output Stages", 20, 179, nothing)
-    cv2.createTrackbar("Upper H", "Output Stages", 52, 179, nothing)
-    cv2.createTrackbar("Lower S", "Output Stages", 24, 255, nothing)
-    cv2.createTrackbar("Upper S", "Output Stages", 255, 255, nothing)
-    cv2.createTrackbar("Lower V", "Output Stages", 45, 255, nothing)
-    cv2.createTrackbar("Upper V", "Output Stages", 255, 255, nothing)
-    cv2.createTrackbar("GaussianBlur Ksize", "Output Stages", 13, 31, nothing)  # Odd values only
-    cv2.createTrackbar("Canny Low Threshold", "Output Stages", 157, 255, nothing)
-    cv2.createTrackbar("Canny High Threshold", "Output Stages", 43, 255, nothing)
+    cv2.createTrackbar("ROI", "Processing Stages", 52,256,nothing)
+    cv2.createTrackbar("Lower H", "Processing Stages", 20, 179, nothing)
+    cv2.createTrackbar("Upper H", "Processing Stages", 52, 179, nothing)
+    cv2.createTrackbar("Lower S", "Processing Stages", 24, 255, nothing)
+    cv2.createTrackbar("Upper S", "Processing Stages", 255, 255, nothing)
+    cv2.createTrackbar("Lower V", "Processing Stages", 45, 255, nothing)
+    cv2.createTrackbar("Upper V", "Processing Stages", 255, 255, nothing)
+    cv2.createTrackbar("GaussianBlur Ksize", "Processing Stages", 13, 31, nothing)  # Odd values only
+    cv2.createTrackbar("Canny Low Threshold", "Processing Stages", 157, 255, nothing)
+    cv2.createTrackbar("Canny High Threshold", "Processing Stages", 43, 255, nothing)
 
     paused = False  # Initialize pause flag
 
@@ -84,50 +86,57 @@ def process_videos(frame):
 
     # resize frame!
     frame_resized = cv2.resize(frame, (640, 480))  # Resize the frame for processing
-
-
-    # from function header
-    frame_resized = cv2.resize(frame, (640, 480))  # Resize the frame for processing, must match the camera frame. 
     height, width = frame_resized.shape[:2]  # Get the height and width of the frame
 
     hsv_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2HSV)  # Convert the frame to HSV
 
     # Get trackbar positions for color thresholds
-    lower_h = cv2.getTrackbarPos("Lower H", "Output Stages")
-    upper_h = cv2.getTrackbarPos("Upper H", "Output Stages")
-    lower_s = cv2.getTrackbarPos("Lower S", "Output Stages")
-    upper_s = cv2.getTrackbarPos("Upper S", "Output Stages")
-    lower_v = cv2.getTrackbarPos("Lower V", "Output Stages")
-    upper_v = cv2.getTrackbarPos("Upper V", "Output Stages")
-    gaussian_ksize = cv2.getTrackbarPos("GaussianBlur Ksize", "Output Stages")
+    roi_shade = cv2.getTrackbarPos("ROI", "Processing Stages")
+    lower_h = cv2.getTrackbarPos("Lower H", "Processing Stages")
+    upper_h = cv2.getTrackbarPos("Upper H", "Processing Stages")
+    lower_s = cv2.getTrackbarPos("Lower S", "Processing Stages")
+    upper_s = cv2.getTrackbarPos("Upper S", "Processing Stages")
+    lower_v = cv2.getTrackbarPos("Lower V", "Processing Stages")
+    upper_v = cv2.getTrackbarPos("Upper V", "Processing Stages")
+    gaussian_ksize = cv2.getTrackbarPos("GaussianBlur Ksize", "Processing Stages")
     if gaussian_ksize % 2 == 0:
         gaussian_ksize += 1
-    canny_low = cv2.getTrackbarPos("Canny Low Threshold", "Output Stages")
-    canny_high = cv2.getTrackbarPos("Canny High Threshold", "Output Stages")
+    canny_low = cv2.getTrackbarPos("Canny Low Threshold", "Processing Stages")
+    canny_high = cv2.getTrackbarPos("Canny High Threshold", "Processing Stages")
 
     lower_green = np.array([lower_h, lower_s, lower_v])  # Define the lower green color bound
     upper_green = np.array([upper_h, upper_s, upper_v])  # Define the upper green color bound
 
-    masked_frame, green_mask = mask_green_to_black(hsv_frame, lower_green, upper_green)  # Mask the green color
+    masked_frame, green_mask = mask_green_to_black(hsv_frame, lower_green,
+                                                    upper_green)  # Mask the green color
 
     result_bgr = cv2.cvtColor(masked_frame, cv2.COLOR_HSV2BGR)  # Convert the masked frame back to BGR
     green_bgr = cv2.cvtColor(green_mask, cv2.COLOR_GRAY2BGR)  # Convert the mask to BGR
 
     # Create a mask to only process the lower part of the image
-    mask_start = int(height * (52 / 100.0))  # Start masking from 48% of the image height
+    mask_start = int(height * (roi_shade / 100.0))  # Start masking from 48% of the image height
     mask = np.zeros_like(result_bgr)  # Create a mask of zeros
     mask[mask_start:, :] = 255  # Set the lower part of the mask to 255 (white)
 
-    edge_mask_start = int(height * (52 / 100.0))
+    edge_mask_start = int(height * (roi_shade / 100.0))
     edgemask = np.zeros_like(result_bgr)
     edgemask[edge_mask_start:, :] = 255
 
-    roi_frame = cv2.bitwise_and(result_bgr, mask)  # Apply the mask to the masked frame
-    roi_green = cv2.bitwise_and(green_bgr,mask)    # Apply the mask to rgb'ed green_mask
+    # Create the bumper mask (INVERSE)
+    bumper_mask_size = 100  # Adjust the size as needed
+    bumper_mask = np.ones_like(result_bgr, dtype=np.uint8) * 255  # initialize to white
+    bumper_mask_x = width // 2 - bumper_mask_size // 2
+    bumper_mask_y = height - bumper_mask_size
+    bumper_mask[bumper_mask_y:bumper_mask_y + bumper_mask_size,
+    bumper_mask_x:bumper_mask_x + bumper_mask_size] = 0  # set the bumper part to black.
 
-    #blurred_frame = cv2.GaussianBlur(roi_frame, (25, 25), 0)
-    #edges = cv2.Canny(blurred_frame, 90, 180)
-    blurred_frame = cv2.GaussianBlur(roi_green, (gaussian_ksize, gaussian_ksize),
+    #roi_frame = cv2.bitwise_and(result_bgr, mask)  # Apply the mask to the masked frame
+    roi_green = cv2.bitwise_and(green_bgr, mask)  # Apply the mask to rgb'ed green_mask
+    roi = cv2.bitwise_and(roi_green, bumper_mask)
+
+    # blurred_frame = cv2.GaussianBlur(roi_frame, (25, 25), 0)
+    # edges = cv2.Canny(blurred_frame, 90, 180)
+    blurred_frame = cv2.GaussianBlur(roi, (gaussian_ksize, gaussian_ksize),
                                         0)  # Apply Gaussian blur to the ROI of the green mask
     edges = cv2.Canny(blurred_frame, canny_low,
                         canny_high)  # Apply Canny edge detection to the blurred frame
@@ -143,7 +152,6 @@ def process_videos(frame):
     # 2. Find Contours and Separate Left/Right:
     contours, _ = cv2.findContours(closed_edges_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours_sorted = sorted(contours, key=lambda c: cv2.arcLength(c, True), reverse=True)
-    longest_contours = contours_sorted[:2]  # Get the top 2 longest contours (for left and right)
 
     edges_largest_two = np.zeros_like(closed_edges)  # Keep this for visualization
     polynomial_frame = frame_resized.copy()
@@ -151,19 +159,25 @@ def process_videos(frame):
     left_contours = []
     right_contours = []
 
-    for contour in longest_contours:
+    for contour in contours_sorted:
         contour_points = np.array(contour).reshape(-1, 2)
         avg_x = np.mean(contour_points[:, 0])  # Average x-coordinate of the contour
 
         if avg_x < width // 2:
             left_contours.append(contour)
-            cv2.drawContours(edges_largest_two, [contour], -1, (255, 0, 0), 3)  # Draw left contours in blue
+            
         else:
             right_contours.append(contour)
-            cv2.drawContours(edges_largest_two, [contour], -1, (0, 0, 255), 3)  # Draw right contours in red
-    
+            
+    # Find the longest left and right contours:
+    longest_left_contours = sorted(left_contours, key=lambda c: cv2.arcLength(c, True),
+                                        reverse=True)[:1] if left_contours else []
+    longest_right_contours = sorted(right_contours, key=lambda c: cv2.arcLength(c, True),
+                                        reverse=True)[:1] if right_contours else []
+
     # Process Left Contours:
-    for contour in left_contours:
+    for contour in longest_left_contours:
+        cv2.drawContours(edges_largest_two, [contour], -1, (255, 0, 0), 3)  # Draw left contours in blue
         l_points = np.array(contour).reshape(-1, 2).tolist()  # Convert contour to list of points
         long_l_points = [(y, x) for x, y in l_points]  # Correct order for polyfit
 
@@ -191,7 +205,8 @@ def process_videos(frame):
                                     thickness=3)
 
     # Process Right Contours (same structure as left):
-    for contour in right_contours:
+    for contour in longest_right_contours:
+        cv2.drawContours(edges_largest_two, [contour], -1, (0, 0, 255), 3)  # Draw right contours in red
         r_points = np.array(contour).reshape(-1, 2).tolist()
         long_r_points = [(y, x) for x, y in r_points]
 
@@ -221,20 +236,25 @@ def process_videos(frame):
     # Get coefficients or fallback to zeros
     left_coeffs = left_polynomial.coeffs if 'left_polynomial' in locals() and left_polynomial is not None else np.zeros(4)
     right_coeffs = right_polynomial.coeffs if 'right_polynomial' in locals() and right_polynomial is not None else np.zeros(4)
+    
+        #cv2.imshow("Mask", bumper_mask)
 
-    # Check if both arrays are valid (not all zeros)
-    if np.any(left_coeffs) and np.any(right_coeffs):
-        average_coeffs = (left_coeffs + right_coeffs) / 2.0
-        return average_coeffs
-    else:
-        return None
+    combined_frame = np.hstack([
+        frame_resized,
+        cv2.cvtColor(green_mask, cv2.COLOR_GRAY2BGR),  # Convert green_mask to BGR
+        closed_edges,
+        edges_largest_two,
+        polynomial_frame
+    ])
 
+    cv2.imshow("Processing Stages", combined_frame)
+    cv2.imshow("Output", polynomial_frame)
     cv2.imshow("Original Frame", frame_resized)
-    cv2.imshow("Masked Frame", roi_frame)
-    cv2.imshow("Edges", edges)  # Original Edges
-    cv2.imshow("Longest Two Edges", edges_largest_two)  # Longest Two Edges
-    cv2.imshow("Polynomial Fit", polynomial_frame)
-    cv2.imshow("Green Mask", green_mask)
-    cv2.imshow("Closed Edges", closed_edges)  # Edges after closing
-    cv2.imshow("roi_edges", roi_edges)
-# end if frame is valid code 
+    
+    cv2.waitKey(1)
+    return {
+        "left_contours": left_contours,
+        "right_contours": right_contours,
+        "left_coeffs": left_coeffs,
+        "right_coeffs": right_coeffs
+    }

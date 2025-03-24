@@ -20,7 +20,7 @@ class CVsubscriberNode(Node):
 
         # ROS2 Image Publisher (processed output)
         # self.publisher = self.create_publisher(Image, 'processed_frames', 10)
-        self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 5)
+        self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 1)
 
         # TODO: Figure out how to subscribe correctly to compressed image
         # TODO: uncomment and fix
@@ -28,7 +28,7 @@ class CVsubscriberNode(Node):
         
         # self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
 
-        self.subscription = self.create_subscription(Image, '/camera/mid/rgb/image_color', self.image_callback, 10)
+        self.subscription = self.create_subscription(Image, '/camera/mid/rgb/image_color', self.image_callback, 1)
 
         # OpenCV Bridge
         self.bridge = CvBridge()
@@ -41,21 +41,39 @@ class CVsubscriberNode(Node):
         # frame_height, frame_width, _ = frame.shape
 
         # Run CV function
-        start = time.time()
-        poly_coeff_cv = process_videos(frame)
-        end = time.time()
+        poly_data = process_videos(frame)
+        left_coeffs = poly_data["left_coeffs"]
+        right_coeffs = poly_data["right_coeffs"]
+        left_contours = poly_data["left_contours"]
+        right_contours = poly_data["right_contours"]
 
-        if not np.any(poly_coeff_cv):
-            return
+        # flatten contours
+        points_right = []
+        for contour in left_contours:
+            reshaped = contour.reshape(-1, 2)
+            for (x, y) in reshaped:
+                points_right.extend([float(x), float(y)])
+        # flatten contours
+        points_left = []
+        for contour in left_contours:
+            reshaped = contour.reshape(-1, 2)
+            for (x, y) in reshaped:
+                points_left.extend([float(x), float(y)])
+        
+        if not (np.any(left_coeffs) and np.any(right_coeffs)):
+            self.get_logger().info("No good lane polynomial found.")
+            #returnaverage_coeffs
+        average_coeffs = (left_coeffs + right_coeffs) / 2.0
 
+        
         # Create a ROS2 message and publish coefficients
         coeff_msg = Float32MultiArray()
-        coeff_msg.data = poly_coeff_cv.astype(float).tolist()
+        coeff_msg.data = average_coeffs.astype(float).tolist()
                          #.astype(float).flatten().tolist()
         self.poly_coeff_publisher.publish(coeff_msg)
 
         # Log the coefficients
-        self.get_logger().info(f"Published Polynomial Coefficients: {poly_coeff_cv}")
+        self.get_logger().info(f"Published Polynomial Coefficients: {average_coeffs}")
 
     
 

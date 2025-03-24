@@ -67,7 +67,7 @@ def process_videos(frame):
     cv2.createTrackbar("ROI", "Processing Stages", 52,256,nothing)
     cv2.createTrackbar("Lower H", "Processing Stages", 20, 179, nothing)
     cv2.createTrackbar("Upper H", "Processing Stages", 52, 179, nothing)
-    cv2.createTrackbar("Lower S", "Processing Stages", 24, 255, nothing)
+    cv2.createTrackbar("Lower S", "Processing Stages", 35, 255, nothing) #24
     cv2.createTrackbar("Upper S", "Processing Stages", 255, 255, nothing)
     cv2.createTrackbar("Lower V", "Processing Stages", 45, 255, nothing)
     cv2.createTrackbar("Upper V", "Processing Stages", 255, 255, nothing)
@@ -250,7 +250,7 @@ def process_videos(frame):
     cv2.imshow("Processing Stages", combined_frame)
     cv2.imshow("Output", polynomial_frame)
     cv2.imshow("Original Frame", frame_resized)
-    
+
     cv2.waitKey(1)
     return {
         "left_contours": left_contours,

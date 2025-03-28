@@ -9,6 +9,7 @@ from ultralytics import YOLO
 import numpy as np
 import time
 from .cv_backend import process_videos
+# from 
 
 
 class CVsubscriberNode(Node):
@@ -65,7 +66,9 @@ class CVsubscriberNode(Node):
             #returnaverage_coeffs
         average_coeffs = (left_coeffs + right_coeffs) / 2.0
 
-        
+        # make the custom msg and publich coefficients and contours
+
+
         # Create a ROS2 message and publish coefficients
         coeff_msg = Float32MultiArray()
         coeff_msg.data = average_coeffs.astype(float).tolist()

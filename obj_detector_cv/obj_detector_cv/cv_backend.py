@@ -25,7 +25,7 @@ def mask_green_to_black(hsv_frame, lower_green, upper_green):
 
 # Function to fit a polynomial to a set of points
 # very useful!
-def fit_polynomial(points, order=3):
+def fit_polynomial(points, order=2):
     """Fits a polynomial of a given order to a set of points.
 
     Args:
@@ -60,7 +60,7 @@ def process_videos(frame):
 
     # Create a window for displaying the Processing Stages
     cv2.namedWindow("Processing Stages", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("Processing Stages", 1920, 720)  # Resize the window
+    # cv2.resizeWindow("Processing Stages", 1920, 720)  # Resize the window
 
 
     # Create trackbars for controlling the lower and upper bounds of the green color
@@ -182,7 +182,7 @@ def process_videos(frame):
         long_l_points = [(y, x) for x, y in l_points]  # Correct order for polyfit
 
         if long_l_points:
-            left_polynomial = fit_polynomial(long_l_points, order=3)
+            left_polynomial = fit_polynomial(long_l_points, order=2)
             if left_polynomial:
                 # ... (rest of the polynomial fitting and drawing logic - same as before)
                 min_y_left = min(p[0] for p in long_l_points)
@@ -211,7 +211,7 @@ def process_videos(frame):
         long_r_points = [(y, x) for x, y in r_points]
 
         if long_r_points:
-            right_polynomial = fit_polynomial(long_r_points, order=3)
+            right_polynomial = fit_polynomial(long_r_points, order=2)
             if right_polynomial:
                 # ... (rest of the polynomial fitting and drawing logic - same as before)
                 min_y_right = min(p[0] for p in long_r_points)
@@ -234,8 +234,9 @@ def process_videos(frame):
                                     thickness=3)
 
     # Get coefficients or fallback to zeros
-    left_coeffs = left_polynomial.coeffs if 'left_polynomial' in locals() and left_polynomial is not None else np.zeros(4)
-    right_coeffs = right_polynomial.coeffs if 'right_polynomial' in locals() and right_polynomial is not None else np.zeros(4)
+    # for order change np.zeros() to the correct array length!
+    left_coeffs = left_polynomial.coeffs if 'left_polynomial' in locals() and left_polynomial is not None else np.zeros(3)
+    right_coeffs = right_polynomial.coeffs if 'right_polynomial' in locals() and right_polynomial is not None else np.zeros(3)
     
         #cv2.imshow("Mask", bumper_mask)
 

@@ -43,7 +43,7 @@ class YoloSubscriberNode(Node):
         # self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
         #self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
 
-        # self.subscription = self.create_subscription(Image,  '/camera/mid/rgb/image_color', self.image_callback, 10)
+        self.subscription = self.create_subscription(Image,  '/camera/mid/rgb/image_color', self.image_callback, 10)
 
 
         # this one publishes the video in this repo

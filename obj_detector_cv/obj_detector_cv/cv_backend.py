@@ -85,8 +85,13 @@ def process_videos(frame):
     """
 
     # resize frame!
-    frame_resized = cv2.resize(frame, (640, 480))  # Resize the frame for processing
+    # frame_resized = cv2.resize(frame, (640, 480))  # Resize the frame for processing
+    # height, width = frame_resized.shape[:2]  # Get the height and width of the frame
+
+    # DO NOT THE FRAME
+    frame_resized = frame
     height, width = frame_resized.shape[:2]  # Get the height and width of the frame
+
 
     hsv_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2HSV)  # Convert the frame to HSV
 

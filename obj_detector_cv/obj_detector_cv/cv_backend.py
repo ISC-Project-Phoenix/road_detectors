@@ -159,6 +159,9 @@ def process_videos(frame):
     left_contours = []
     right_contours = []
 
+    long_r_points = []
+    long_l_points = []
+
     for contour in contours_sorted:
         contour_points = np.array(contour).reshape(-1, 2)
         avg_x = np.mean(contour_points[:, 0])  # Average x-coordinate of the contour
@@ -238,7 +241,51 @@ def process_videos(frame):
     left_coeffs = left_polynomial.coeffs if 'left_polynomial' in locals() and left_polynomial is not None else np.zeros(3)
     right_coeffs = right_polynomial.coeffs if 'right_polynomial' in locals() and right_polynomial is not None else np.zeros(3)
     
-        #cv2.imshow("Mask", bumper_mask)
+
+
+    if (np.any(left_coeffs) and np.any(right_coeffs)):
+        average_coeffs = (left_coeffs + right_coeffs) / 2.0
+        
+        # Determine which contour to use based on arc length
+        if longest_right_contours and longest_left_contours:
+            right_length = cv2.arcLength(longest_right_contours[0], False)
+            left_length = cv2.arcLength(longest_left_contours[0], False)
+            longest_contour = longest_right_contours[0] if right_length > left_length else longest_left_contours[0]
+        elif longest_right_contours:
+            longest_contour = longest_right_contours[0]
+        elif longest_left_contours:
+            longest_contour = longest_left_contours[0]
+        else:
+            longest_contour = None
+
+        if longest_contour is not None:
+            # Convert contour to numpy array and reshape
+            contour_points = np.array(longest_contour).reshape(-1, 2)
+            
+            contour_points = np.array(contour_points).reshape(-1, 2)
+            y_points = contour_points[:, 1]  # Using y-values as input
+            
+            # Evaluate x = f(y) using the polynomial
+            x_points = np.polyval(average_coeffs, y_points)
+            
+            # Combine and format for OpenCV
+            curve_points_middle = np.column_stack((x_points, y_points)).astype(np.int32)
+            curve_points_middle = curve_points_middle.reshape((-1, 1, 2))
+            
+            # Draw debug points (red circles) to verify positions
+            for point in curve_points_middle[:,0,:]:
+                cv2.circle(polynomial_frame, tuple(point), 3, (0,0,255), -1)
+            
+            # Draw the curve if we have valid points
+            if curve_points_middle.size > 0:
+                cv2.polylines(
+                    polynomial_frame,
+                    [curve_points_middle],
+                    isClosed=False,
+                    color=(255, 255, 155),  # Yellow
+                    thickness=3
+                )
+
 
     combined_frame = np.hstack([
         frame_resized,

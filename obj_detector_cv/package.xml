@@ -20,6 +20,8 @@
   <depend>ultralytics</depend>
   <depend>numpy</depend>
   <depend>image_transport</depend>
+  <depend>phnx_msgs</depend>
+  <depend>geometry_msgs</depend>
   
   <export>
     <build_type>ament_python</build_type>

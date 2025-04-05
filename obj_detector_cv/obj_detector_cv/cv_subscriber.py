@@ -102,7 +102,10 @@ class CVsubscriberNode(Node):
         coeff_msg = Float32MultiArray()
         coeff_msg.data = average_coeffs.astype(float).tolist()
                          #.astype(float).flatten().tolist()
-        self.contours_publisher.publish(coeff_msg)
+
+        # both publishers, for for centriods and one for the contours!
+        self.poly_coeff_publisher.publish(coeff_msg)
+        # self.contours_publisher.publish(msg)
 
         # Log the coefficients
         self.get_logger().info(f"Published Polynomial Coefficients: {average_coeffs}")

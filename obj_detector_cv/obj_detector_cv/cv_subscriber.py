@@ -23,8 +23,8 @@ class CVsubscriberNode(Node):
 
         # ROS2 Image Publisher (processed output)
         # self.publisher = self.create_publisher(Image, 'processed_frames', 10)
-        # self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 1)
-        self.contours_publisher = self.create_publisher(Contours, '/road/Contours', 1)
+        self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 1)
+        # self.contours_publisher = self.create_publisher(Contours, '/road/Contours', 1)
 
         # TODO: Figure out how to subscribe correctly to compressed image
         # TODO: uncomment and fix
@@ -102,7 +102,7 @@ class CVsubscriberNode(Node):
         coeff_msg = Float32MultiArray()
         coeff_msg.data = average_coeffs.astype(float).tolist()
                          #.astype(float).flatten().tolist()
-        self.contours_publisher.publish(msg)
+        self.contours_publisher.publish(coeff_msg)
 
         # Log the coefficients
         self.get_logger().info(f"Published Polynomial Coefficients: {average_coeffs}")

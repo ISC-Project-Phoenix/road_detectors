@@ -136,6 +136,9 @@ class YoloSubscriberNode(Node):
         # unnesscary for CV
         frame_height, frame_width, _ = frame.shape
 
+        crop_precent = 0.45 # this is the precent of the frame from the bottom that you want to evaluelate
+        translate = frame_height * (1 - crop_precent)
+        
         # Crop to the bottom 45% of the frame
         crop_y_start = int(frame_height * 0.45)
         cropped_frame = frame[crop_y_start:, :]
@@ -148,11 +151,14 @@ class YoloSubscriberNode(Node):
         binary_mask = np.zeros(cropped_frame.shape[:2], dtype=np.uint8)
 
         # Process each detection result from YOLO
-        for result in results:
-            if result.masks is not None:
-                for mask, cls in zip(result.masks.xy, result.boxes.cls):
+        for result in results:      # loop through all the detection YOLO made
+            if result.masks is not None:    # only process isnstanse with segmentation masks 
+                for mask, cls in zip(result.masks.xy, result.boxes.cls):    
                     points = np.array(mask, dtype=np.int32)
                     if int(cls) == 0 and points.shape[0] >= 3:  # Process class 0 ("Road")
+
+                        # Coordinate adjustment happens here
+                        points[:, 1] += translate  # Adjust y-coordinates to original frame
                         points = points.reshape((-1, 1, 2))
                         cv2.fillPoly(binary_mask, [points], 255)
 

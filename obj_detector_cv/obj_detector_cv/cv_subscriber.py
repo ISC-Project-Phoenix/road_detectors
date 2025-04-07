@@ -46,6 +46,9 @@ class CVsubscriberNode(Node):
 
         # Run CV function
         poly_data = process_videos(frame)
+        if poly_data is  None:
+            self.get_logger().info("Insufficient contours!")
+            return
         left_coeffs = poly_data["left_coeffs"]
         right_coeffs = poly_data["right_coeffs"]
         left_contours = poly_data["left_contours"]
@@ -68,6 +71,8 @@ class CVsubscriberNode(Node):
             self.get_logger().info("No good lane polynomial found.")
             #returnaverage_coeffs
         average_coeffs = (left_coeffs + right_coeffs) / 2.0
+        
+        mininium_threshold = 150;
 
         # make the custom msg and publich coefficients and contours
         # Process left contours

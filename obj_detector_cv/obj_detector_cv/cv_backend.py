@@ -182,6 +182,17 @@ def process_videos(frame):
                                         reverse=True)[:1] if left_contours else []
     longest_right_contours = sorted(right_contours, key=lambda c: cv2.arcLength(c, True),
                                         reverse=True)[:1] if right_contours else []
+    mininium_threshold = height * 0.35;
+
+    perimeter = cv2.arcLength(longest_right_contours[0], True)
+    if perimeter < mininium_threshold:
+        # self.get_logger().info("right mininium threshold not meet.")
+        return
+    
+    perimeter = cv2.arcLength(longest_right_contours[0], True)
+    if perimeter < mininium_threshold:
+        # self.get_logger().info("right mininium threshold not meet.")
+        return
 
     # Process Left Contours:
     for contour in longest_left_contours:
@@ -206,7 +217,7 @@ def process_videos(frame):
                 curve_points_left = np.array(list(zip(x_vals_left.astype(int), y_vals_left.astype(int))),
                                                 np.int32)
                 curve_points_left = curve_points_left.reshape((-1, 1, 2))
-
+                
                 if curve_points_left.size > 0:
                     cv2.polylines(polynomial_frame, [curve_points_left], isClosed=False,
                                     color=(255, 255, 0),
@@ -235,6 +246,7 @@ def process_videos(frame):
                 curve_points_right = np.array(list(zip(x_vals_right.astype(int), y_vals_right.astype(int))),
                                                 np.int32)
                 curve_points_right = curve_points_right.reshape((-1, 1, 2))
+
 
                 if curve_points_right.size > 0:
                     cv2.polylines(polynomial_frame, [curve_points_right], isClosed=False,

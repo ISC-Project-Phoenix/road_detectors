@@ -1,9 +1,6 @@
 import cv2
 import numpy as np
 
-# Function to open a file dialog for video selection
-# we shouldnt be using this!
-
 # Function to mask green color to black in an HSV frame
 # nesscary
 def mask_green_to_black(hsv_frame, lower_green, upper_green):
@@ -43,7 +40,7 @@ def fit_polynomial(points, order=2):
     polynomial = np.poly1d(coeffs)  # Create a polynomial object
     return polynomial  # Return the polynomial object
 
-# Empty function used for trackbar callback
+# Empty function used for trackbar callback CANNOT REMOVE, FOR CV
 def nothing(x):
     """A dummy function used as a callback for trackbars."""
     pass  # Does nothing
@@ -61,22 +58,7 @@ def process_videos(frame):
     # Create a window for displaying the Processing Stages
     cv2.namedWindow("Processing Stages", cv2.WINDOW_NORMAL)
     # cv2.resizeWindow("Processing Stages", 1920, 720)  # Resize the window
-
-
-    # Create trackbars for controlling the lower and upper bounds of the green color
-    cv2.createTrackbar("ROI", "Processing Stages", 52,256,nothing)
-    cv2.createTrackbar("Lower H", "Processing Stages", 20, 179, nothing)
-    cv2.createTrackbar("Upper H", "Processing Stages", 52, 179, nothing)
-    cv2.createTrackbar("Lower S", "Processing Stages", 35, 255, nothing) #24
-    cv2.createTrackbar("Upper S", "Processing Stages", 255, 255, nothing)
-    cv2.createTrackbar("Lower V", "Processing Stages", 45, 255, nothing)
-    cv2.createTrackbar("Upper V", "Processing Stages", 255, 255, nothing)
-    cv2.createTrackbar("GaussianBlur Ksize", "Processing Stages", 13, 31, nothing)  # Odd values only
-    cv2.createTrackbar("Canny Low Threshold", "Processing Stages", 157, 255, nothing)
-    cv2.createTrackbar("Canny High Threshold", "Processing Stages", 43, 255, nothing)
-
-    paused = False  # Initialize pause flag
-
+    
     """
     TODO:
         remove while loop from scope. 
@@ -96,18 +78,18 @@ def process_videos(frame):
     hsv_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2HSV)  # Convert the frame to HSV
 
     # Get trackbar positions for color thresholds
-    roi_shade = cv2.getTrackbarPos("ROI", "Processing Stages")
-    lower_h = cv2.getTrackbarPos("Lower H", "Processing Stages")
-    upper_h = cv2.getTrackbarPos("Upper H", "Processing Stages")
-    lower_s = cv2.getTrackbarPos("Lower S", "Processing Stages")
-    upper_s = cv2.getTrackbarPos("Upper S", "Processing Stages")
-    lower_v = cv2.getTrackbarPos("Lower V", "Processing Stages")
-    upper_v = cv2.getTrackbarPos("Upper V", "Processing Stages")
-    gaussian_ksize = cv2.getTrackbarPos("GaussianBlur Ksize", "Processing Stages")
-    if gaussian_ksize % 2 == 0:
-        gaussian_ksize += 1
-    canny_low = cv2.getTrackbarPos("Canny Low Threshold", "Processing Stages")
-    canny_high = cv2.getTrackbarPos("Canny High Threshold", "Processing Stages")
+    roi_shade = 52 #cv2.getTrackbarPos("ROI", "Processing Stages")
+    lower_h = 20 #cv2.getTrackbarPos("Lower H", "Processing Stages")
+    upper_h = 110 #52 #cv2.getTrackbarPos("Upper H", "Processing Stages")
+    lower_s = 35 #cv2.getTrackbarPos("Lower S", "Processing Stages")
+    upper_s = 255 #cv2.getTrackbarPos("Upper S", "Processing Stages")
+    lower_v = 45 #cv2.getTrackbarPos("Lower V", "Processing Stages")
+    upper_v = 255 #cv2.getTrackbarPos("Upper V", "Processing Stages")
+    gaussian_ksize = 13 #cv2.getTrackbarPos("GaussianBlur Ksize", "Processing Stages")
+    #if gaussian_ksize % 2 == 0:
+    #    gaussian_ksize += 1
+    canny_low = 157 #cv2.getTrackbarPos("Canny Low Threshold", "Processing Stages")
+    canny_high = 43 #cv2.getTrackbarPos("Canny High Threshold", "Processing Stages")
 
     lower_green = np.array([lower_h, lower_s, lower_v])  # Define the lower green color bound
     upper_green = np.array([upper_h, upper_s, upper_v])  # Define the upper green color bound
@@ -313,8 +295,8 @@ def process_videos(frame):
     ])
 
     cv2.imshow("Processing Stages", combined_frame)
-    cv2.imshow("Output", polynomial_frame)
-    cv2.imshow("Original Frame", frame_resized)
+    #cv2.imshow("Output", polynomial_frame)
+    #cv2.imshow("Original Frame", frame_resized)
 
     cv2.waitKey(1)
     return {

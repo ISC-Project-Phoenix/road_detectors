@@ -13,14 +13,17 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='andy',
-    maintainer_email='Andrew@Ealovega.dev',
+    maintainer='Alexander Boccaccio',
+    maintainer_email='aboccacc@umich.edu',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'obj_detector_cv = obj_detector_cv.obj_detector_cv:main'
+            'obj_detector_cv = obj_detector_cv.obj_detector_cv:main',
+            'cv_subscriber = obj_detector_cv.cv_subscriber:main',
+            'cv_backend = obj_detector_cv.cv_backend:main',
+            'cv_publisher = obj_detector_cv.cv_publisher:main',
         ],
     },
 )

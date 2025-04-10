@@ -17,7 +17,7 @@ class YoloSubscriberNode(Node):
         # **
         # (Substitute with your trained YOLO model)
         # **
-        self.model = YOLO('/home/jaredwensley/Documents/Dev/phnx_ws/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/best.pt')  # Example: '/home/user/best.pt'
+        self.model = YOLO('/home/isc-learning2/Documents/ws_redtoo/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/best.pt')  # Example: '/home/user/best.pt'
         self.model.conf = 0.80  # Confidence threshold
 
         # Define drawing colors in BGR format
@@ -40,7 +40,7 @@ class YoloSubscriberNode(Node):
         self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 5)
 
         # TODO: Figure out how to subscribe correctly to compressed image
-        self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
+        # self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
         #self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
 
         self.subscription = self.create_subscription(Image,  '/camera/mid/rgb/image_color', self.image_callback, 10)
@@ -54,7 +54,7 @@ class YoloSubscriberNode(Node):
 
         self.get_logger().info("Lane Detection Node Started.")
 
-
+    # for the publisher node DONT USE
     def listener_callback(self, msg):
 
         # Convert compressed image data to a numpy array
@@ -129,9 +129,11 @@ class YoloSubscriberNode(Node):
                 self.get_logger().warn(f"Polynomial fitting error: {e}")
         return None, smoothed_coeff
 
+    # for the ROS2 frames. 
     def image_callback(self, msg):
         """Process frames from ROS2 topic."""
         frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+        # unnesscary for CV
         frame_height, frame_width, _ = frame.shape
 
         # Crop to the bottom 45% of the frame
@@ -171,16 +173,16 @@ class YoloSubscriberNode(Node):
         for y in range(0, binary_mask.shape[0]):
             if left_poly_func:
                 x_left = int(left_poly_func(y))
-                if 0 <= x_left < binary_mask.shape[1]:
-                    cv2.circle(overlay, (x_left, y), 2, self.left_color, -1)
+                # if 0 <= x_left < binary_mask.shape[1]:
+                    # cv2.circle(overlay, (x_left, y), 2, self.left_color, -1)
             if center_poly_func:
                 x_center = int(center_poly_func(y))
                 if 0 <= x_center < binary_mask.shape[1]:
                     cv2.circle(overlay, (x_center, y), 2, self.center_color, -1)
             if right_poly_func:
                 x_right = int(right_poly_func(y))
-                if 0 <= x_right < binary_mask.shape[1]:
-                    cv2.circle(overlay, (x_right, y), 2, self.right_color, -1)
+                # if 0 <= x_right < binary_mask.shape[1]:
+                    # cv2.circle(overlay, (x_right, y), 2, self.right_color, -1)
 
         # Display FPS
         fps_text = f'{1/(end - start):.2f} FPS'

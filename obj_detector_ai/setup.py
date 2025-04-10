@@ -26,6 +26,7 @@ setup(
             'yolo_subscriber_node = obj_detector_ai.yolo_subscriber_node:main',
             'yolo_subscriber_node_new = obj_detector_ai.yolo_subscriber_node_new:main',
             'yolo_publisher_node = obj_detector_ai.yolo_publisher_node:main',
+            'image_save_node = obj_detector_ai.save_img:main',
 
         ],
     },

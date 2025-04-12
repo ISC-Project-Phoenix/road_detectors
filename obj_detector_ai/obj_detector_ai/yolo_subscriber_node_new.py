@@ -1,6 +1,8 @@
+import math
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import CompressedImage, Image
+from sensor_msgs.msg import CompressedImage
+from sensor_msgs.msg import Image
 from std_msgs.msg import Float32MultiArray
 from cv_bridge import CvBridge
 import cv2
@@ -14,8 +16,8 @@ class YoloSubscriberNode(Node):
         super().__init__('yolo_subscriber_node')
 
         # Load your trained YOLO model (update the path as needed)
-        self.model = YOLO('/home/isc-learning2/Documents/ws_redtoo/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/bestJ.pt')
-        self.model.conf = 0.75  # Confidence threshold
+        self.model = YOLO('/home/redtoo/Documents/ws_redtoo/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/bestBERTO.pt')  # Example: '/home/user/best.pt'
+        self.model.conf = 0.95  # Confidence threshold
 
         # Define drawing colors in BGR format
         self.left_color = (255, 0, 0)    # Blue for left boundary
@@ -28,15 +30,23 @@ class YoloSubscriberNode(Node):
         self.smoothed_center_poly_coeff = None
         self.smoothed_right_poly_coeff = None
 
-        # Create ROS2 Image Publisher (processed output)
-       
-       
+        # ROS2 Image Subscriber (input frames)
+
+       # self.it = ImageTransport(self)
+
+        # ROS2 Image Publisher (processed output)
         self.publisher = self.create_publisher(Image, 'processed_frames', 10)
         self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 5)
 
-        # Subscribe to the ROS2 image topic (change the topic as required)
-        self.subscription = self.create_subscription(Image, '/camera/mid/rgb/image_color', self.image_callback, 10)
-        self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
+        # TODO: Figure out how to subscribe correctly to compressed image
+        # self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
+        #self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
+
+        self.subscription = self.create_subscription(Image,  '/camera/mid/rgb/image_color', self.image_callback, 10)
+
+
+        # this one publishes the video in this repo
+        #self.subscription = self.create_subscription(Image, '/video_frames' ,self.image_callback, 10)
 
         # OpenCV Bridge
         self.bridge = CvBridge()
@@ -88,6 +98,9 @@ class YoloSubscriberNode(Node):
         if frame is None or frame.shape[0] == 0 or frame.shape[1] == 0:
             self.get_logger().warn("Received an empty or invalid frame; skipping processing.")
             return
+        frame_height, frame_width, _ = frame.shape
+        # apply binrary mask
+        # cv2.rectangle( frame, (0,0), (frame_width, int( math.floor(frame_height * 0.55)) ), color=(0,200,0), thickness=-1)
 
         # --- Use Full Frame (No Cropping) ---
         cropped_frame = frame  # Using the full frame directly
@@ -123,8 +136,8 @@ class YoloSubscriberNode(Node):
         left_points, center_points, right_points = self.get_boundary_points(binary_mask, step=5)
 
         # Fit polynomials for left, right, and center boundaries
-        left_poly_func, self.smoothed_left_poly_coeff = self.fit_polynomial(left_points, self.smoothed_left_poly_coeff)
-        right_poly_func, self.smoothed_right_poly_coeff = self.fit_polynomial(right_points, self.smoothed_right_poly_coeff)
+        # left_poly_func, self.smoothed_left_poly_coeff = self.fit_polynomial(left_points, self.smoothed_left_poly_coeff)
+        # right_poly_func, self.smoothed_right_poly_coeff = self.fit_polynomial(right_points, self.smoothed_right_poly_coeff)
         center_poly_func, self.smoothed_center_poly_coeff = self.fit_polynomial(center_points, self.smoothed_center_poly_coeff)
 
         # --- Calculate the Curvature of the Center Polynomial ---

@@ -30,23 +30,16 @@ class YoloSubscriberNode(Node):
         self.smoothed_center_poly_coeff = None
         self.smoothed_right_poly_coeff = None
 
-        # ROS2 Image Subscriber (input frames)
-
-       # self.it = ImageTransport(self)
 
         # ROS2 Image Publisher (processed output)
         self.publisher = self.create_publisher(Image, 'processed_frames', 10)
         self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 5)
 
-        # TODO: Figure out how to subscribe correctly to compressed image
-        # self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
-        #self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
 
-        self.subscription = self.create_subscription(Image,  '/camera/mid/rgb/image_color', self.image_callback, 10)
-
-
-        # this one publishes the video in this repo
-        #self.subscription = self.create_subscription(Image, '/video_frames' ,self.image_callback, 10)
+        # Subscribe to the ROS2 image topic (change the topic as required)
+        self.subscription = self.create_subscription(Image, '/camera/mid/rgb/image_color', self.image_callback, 10)
+        
+        self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
 
         # OpenCV Bridge
         self.bridge = CvBridge()

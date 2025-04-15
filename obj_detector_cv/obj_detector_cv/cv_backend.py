@@ -164,9 +164,12 @@ def process_videos(frame):
                                         reverse=True)[:1] if left_contours else []
     longest_right_contours = sorted(right_contours, key=lambda c: cv2.arcLength(c, True),
                                         reverse=True)[:1] if right_contours else []
-    mininium_threshold = height * 0.35;
+    mininium_threshold = height * 0.45;
 
-    perimeter = cv2.arcLength(longest_right_contours[0], True)
+    if not longest_left_contours or not longest_right_contours:
+        return
+    
+    perimeter = cv2.arcLength(longest_left_contours[0], True)
     if perimeter < mininium_threshold:
         # self.get_logger().info("right mininium threshold not meet.")
         return
@@ -300,8 +303,8 @@ def process_videos(frame):
 
     cv2.waitKey(1)
     return {
-        "left_contours": left_contours,
-        "right_contours": right_contours,
+        "left_contours": longest_left_contours,
+        "right_contours": longest_right_contours,
         "left_coeffs": left_coeffs,
         "right_coeffs": right_coeffs
     }

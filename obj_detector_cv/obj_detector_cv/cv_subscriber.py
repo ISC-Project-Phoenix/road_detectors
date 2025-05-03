@@ -57,7 +57,7 @@ class CVsubscriberNode(Node):
 
         # flatten contours
         points_right = []
-        for contour in left_contours:
+        for contour in right_contours:
             reshaped = contour.reshape(-1, 2)
             for (x, y) in reshaped:
                 points_right.extend([float(x), float(y)])
@@ -104,9 +104,9 @@ class CVsubscriberNode(Node):
         msg.center_poly = average_coeffs.astype(float).tolist()
 
 
-        mininium_threshold = 0.25 * height
+        mininium_threshold = 0.0 * height
 
-        if len(vector3d_left_contours) < 3 or len(vector3d_right_contours) < 3:
+        if len(vector3d_left_contours[0]) < 3 or len(vector3d_right_contours) < 3:
             self.get_logger().info("minium size of 3 not met with either")
             return
 
@@ -121,7 +121,7 @@ class CVsubscriberNode(Node):
         
         if dist < mininium_threshold:
             self.get_logger().info("mininium_threshold not met with left")
-            return 
+            # return 
         i = 1
         dist = 0
         while i < len(vector3d_right_contours) -1:
@@ -133,8 +133,40 @@ class CVsubscriberNode(Node):
             
         if dist < mininium_threshold:
             self.get_logger().info("mininium_threshold not met with right")
-            return 
+            # return 
 
+        
+        # checks to see the contours interact with the edge of the screen
+        into_the_edge_check: bool = True;    # flag to trip
+        edge_percentage: float = 0.05;       # error margin for intersecting with the edge
+        # for left edge detection
+        for point in vector3d_left_contours:
+            # check the left edge
+            if point.x < width * edge_percentage:
+                into_the_edge_check = False;
+                break
+            # check the bottom edge
+            if point.y > height * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+            # check the right edge
+            if point.x > width * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+        # for the right edge
+        for point in vector3d_right_contours:
+            if point.x < width * edge_percentage:
+                into_the_edge_check = False;
+                break
+            if point.y > height * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+            if point.x > width * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+
+        if into_the_edge_check:
+            return
 
         
         # Create a ROS2 message and publish coefficients

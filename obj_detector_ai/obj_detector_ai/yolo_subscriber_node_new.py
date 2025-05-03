@@ -8,16 +8,25 @@ import cv2
 from ultralytics import YOLO
 import numpy as np
 import time
+from pathlib import Path
+from ament_index_python.packages import get_package_share_directory
+import os
+
 
 
 class YoloSubscriberNode(Node):
     def __init__(self):
         super().__init__('yolo_subscriber_node')
 
+
+        pkg_path = get_package_share_directory('obj_detector_ai')
+        weights_path = os.path.join(pkg_path, 'weights', 'best.pt')
+        self.model = YOLO(weights_path)
+
         # **
         # (Substitute with your trained YOLO model)
         # **
-        self.model = YOLO('/home/isc-learning2/Documents/ws_redtoo/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/best.pt')  # Example: '/home/user/best.pt'
+        #self.model = YOLO('/home/isc/Documents/ws_phnx/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/best.pt')  # Example: '/home/user/best.pt'
         self.model.conf = 0.80  # Confidence threshold
 
         # Define drawing colors in BGR format

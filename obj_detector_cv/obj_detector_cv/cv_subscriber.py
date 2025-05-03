@@ -104,11 +104,7 @@ class CVsubscriberNode(Node):
         msg.center_poly = average_coeffs.astype(float).tolist()
 
 
-        mininium_threshold = 0.0 * height
-
-        if len(vector3d_left_contours[0]) < 3 or len(vector3d_right_contours) < 3:
-            self.get_logger().info("minium size of 3 not met with either")
-            return
+        mininium_threshold = 0.25 * height
 
         i = 1
         dist = 0
@@ -126,8 +122,8 @@ class CVsubscriberNode(Node):
         dist = 0
         while i < len(vector3d_right_contours) -1:
             # start looper 
-            vect1 = vector3d_left_contours[i]
-            vect2 = vector3d_left_contours[i-1]
+            vect1 = vector3d_right_contours[i]
+            vect2 = vector3d_right_contours[i-1]
             dist +=  (vect1.x - vect2.x ) * (vect1.y - vect2.y)   
             i += 1     
             

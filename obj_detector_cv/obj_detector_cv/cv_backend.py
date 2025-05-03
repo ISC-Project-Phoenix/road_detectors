@@ -303,8 +303,8 @@ def process_videos(frame):
 
     cv2.waitKey(1)
     return {
-        "left_contours": longest_left_contours[0],
-        "right_contours": longest_right_contours[0],
+        "left_contours": longest_left_contours,
+        "right_contours": longest_right_contours,
         "left_coeffs": left_coeffs,
         "right_coeffs": right_coeffs
     }

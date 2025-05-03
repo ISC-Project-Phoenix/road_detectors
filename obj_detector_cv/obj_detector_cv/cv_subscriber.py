@@ -24,7 +24,7 @@ class CVsubscriberNode(Node):
         # ROS2 Image Publisher (processed output)
         # self.publisher = self.create_publisher(Image, 'processed_frames', 10)
         self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 1)
-        # self.contours_publisher = self.create_publisher(Contours, '/road/Contours', 1)
+        self.contours_publisher = self.create_publisher(Contours, '/road/Contours', 1)
 
         # TODO: Figure out how to subscribe correctly to compressed image
         # TODO: uncomment and fix
@@ -42,6 +42,7 @@ class CVsubscriberNode(Node):
     def image_callback(self, msg):
         """Process frames from ROS2 topic."""
         frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+        height, width, channels = frame.shape
         # frame_height, frame_width, _ = frame.shape
 
         # Run CV function
@@ -72,8 +73,6 @@ class CVsubscriberNode(Node):
             #returnaverage_coeffs
         average_coeffs = (left_coeffs + right_coeffs) / 2.0
         
-        mininium_threshold = 150;
-
         # make the custom msg and publich coefficients and contours
         # Process left contours
         vector3d_left_contours = []
@@ -102,7 +101,42 @@ class CVsubscriberNode(Node):
         msg = Contours()
         msg.left_contour = vector3d_left_contours
         msg.right_contour = vector3d_right_contours
+        msg.center_poly = average_coeffs.astype(float).tolist()
 
+
+        mininium_threshold = 0.25 * height
+
+        if len(vector3d_left_contours) < 3 or len(vector3d_right_contours) < 3:
+            self.get_logger().info("minium size of 3 not met with either")
+            return
+
+        i = 1
+        dist = 0
+        while i < len(vector3d_left_contours) -1:
+            # start looper
+            vect1 = vector3d_left_contours[i]
+            vect2 = vector3d_left_contours[i-1]
+            dist +=  (vect1.x - vect2.x ) * (vect1.y - vect2.y)
+            i += 1
+        
+        if dist < mininium_threshold:
+            self.get_logger().info("mininium_threshold not met with left")
+            return 
+        i = 1
+        dist = 0
+        while i < len(vector3d_right_contours) -1:
+            # start looper 
+            vect1 = vector3d_left_contours[i]
+            vect2 = vector3d_left_contours[i-1]
+            dist +=  (vect1.x - vect2.x ) * (vect1.y - vect2.y)   
+            i += 1     
+            
+        if dist < mininium_threshold:
+            self.get_logger().info("mininium_threshold not met with right")
+            return 
+
+
+        
         # Create a ROS2 message and publish coefficients
         coeff_msg = Float32MultiArray()
         coeff_msg.data = average_coeffs.astype(float).tolist()
@@ -110,7 +144,7 @@ class CVsubscriberNode(Node):
 
         # both publishers, for for centriods and one for the contours!
         self.poly_coeff_publisher.publish(coeff_msg)
-        # self.contours_publisher.publish(msg)
+        self.contours_publisher.publish(msg)
 
         # Log the coefficients
         self.get_logger().info(f"Published Polynomial Coefficients: {average_coeffs}")

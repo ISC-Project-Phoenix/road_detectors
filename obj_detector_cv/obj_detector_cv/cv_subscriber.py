@@ -108,6 +108,38 @@ class CVsubscriberNode(Node):
 
         i = 1
         dist = 0
+        min_dist = height * width;
+        max_dist = 0.0;
+        while i < len(vector3d_left_contours) -1:
+            vect1 = vector3d_left_contours[i]
+            vect2 = vector3d_left_contours[i-1]
+            dist =  (vect1.x - vect2.x ) * (vect1.y - vect2.y)
+            if min_dist > dist:
+                min_dist = dist;
+            if max_dist < dist:
+                max_dist = dist;
+            i += 1
+        if max_dist - min_dist < mininium_threshold:
+            self.get_logger().info("New threshold not met with left")
+            return
+                i = 1
+        dist = 0
+        min_dist = height * width;
+        max_dist = 0.0;
+        while i < len(vector3d_right_contours) -1:
+            vect1 = vector3d_right_contours[i]
+            vect2 = vector3d_right_contours[i-1]
+            dist =  (vect1.x - vect2.x ) * (vect1.y - vect2.y)
+            if min_dist > dist:
+                min_dist = dist;
+            if max_dist < dist:
+                max_dist = dist;
+            i += 1
+        if max_dist - min_dist < mininium_threshold:
+            self.get_logger().info("New threshold not met with right")
+            return
+        i = 1
+        dist = 0
         while i < len(vector3d_left_contours) -1:
             # start looper
             vect1 = vector3d_left_contours[i]
@@ -116,8 +148,8 @@ class CVsubscriberNode(Node):
             i += 1
         
         if dist < mininium_threshold:
-            self.get_logger().info("mininium_threshold not met with left")
-            # return 
+            # self.get_logger().info("mininium_threshold not met with left")
+            return 
         i = 1
         dist = 0
         while i < len(vector3d_right_contours) -1:
@@ -129,7 +161,7 @@ class CVsubscriberNode(Node):
             
         if dist < mininium_threshold:
             self.get_logger().info("mininium_threshold not met with right")
-            # return 
+            return 
 
         
         # checks to see the contours interact with the edge of the screen

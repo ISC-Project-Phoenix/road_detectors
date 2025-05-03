@@ -78,7 +78,8 @@ def process_videos(frame):
     hsv_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2HSV)  # Convert the frame to HSV
 
     # Get trackbar positions for color thresholds
-    roi_shade = 52 #cv2.getTrackbarPos("ROI", "Processing Stages")
+    roi_shade = 55 #cv2.getTrackbarPos("ROI", "Processing Stages")
+    roi_shade_lower = 20
     lower_h = 20 #cv2.getTrackbarPos("Lower H", "Processing Stages")
     upper_h = 110 #52 #cv2.getTrackbarPos("Upper H", "Processing Stages")
     lower_s = 35 #cv2.getTrackbarPos("Lower S", "Processing Stages")

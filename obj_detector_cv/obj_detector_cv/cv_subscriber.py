@@ -66,7 +66,8 @@ class CVsubscriberNode(Node):
         
         if not (np.any(left_coeffs) and np.any(right_coeffs)):
             self.get_logger().info("No good lane polynomial found.")
-            #returnaverage_coeffs
+            # return when no good polynomials
+            return
         average_coeffs = (left_coeffs + right_coeffs) / 2.0
 
         # make the custom msg and publich coefficients and contours
@@ -97,6 +98,42 @@ class CVsubscriberNode(Node):
         msg = Contours()
         msg.left_contour = vector3d_left_contours
         msg.right_contour = vector3d_right_contours
+        msg.center_poly = average_coeffs.astype(float).tolist()
+
+
+        mininium_threshold = 0.25 * height
+
+        # check if the contours are bigger than the threshold\
+        # we take the difference from the point farrest from the upper right corner and 
+        # and the farest point to compare its length with the threshold
+        i = 1
+        dist = 0
+        min_dist = height * width;
+        max_dist = 0.0;
+        while i < len(vector3d_left_contours) -1:
+            vect1 = vector3d_left_contours[i]
+            vect2 = vector3d_left_contours[i-1]
+            dist =  ((vect1.x - vect2.x ) ** 2 + (vect1.y - vect2.y) ** 2 ) ** 0.5
+            if min_dist > dist:
+                min_dist = dist;
+            if max_dist < dist:
+                max_dist = dist;
+            i += 1
+        if abs(max_dist - min_dist) < mininium_threshold:
+            self.get_logger().info("New threshold not met with left")
+            #return
+        i = 1
+        dist = 0
+        while i < len(vector3d_left_contours) -1:
+            # start looper
+            vect1 = vector3d_left_contours[i]
+            vect2 = vector3d_left_contours[i-1]
+            dist +=  ( (vect1.x - vect2.x ) ** 2 + (vect1.y - vect2.y) ** 2 ) ** 0.5
+            i += 1
+        
+        if dist < mininium_threshold:
+            self.get_logger().info("mininium_threshold not met with left")
+            return 
 
         # Create a ROS2 message and publish coefficients
         coeff_msg = Float32MultiArray()

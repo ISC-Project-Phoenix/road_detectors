@@ -182,6 +182,15 @@ def process_videos(frame):
                                         reverse=True)[:1] if left_contours else []
     longest_right_contours = sorted(right_contours, key=lambda c: cv2.arcLength(c, True),
                                         reverse=True)[:1] if right_contours else []
+    mininium_threshold = height * 0.45;
+
+    if not longest_left_contours:
+        return
+    
+    perimeter = cv2.arcLength(longest_left_contours[0], True)
+    if perimeter < mininium_threshold:
+        # self.get_logger().info("right mininium threshold not meet.")
+        return
 
     # Process Left Contours:
     for contour in longest_left_contours:
@@ -190,7 +199,7 @@ def process_videos(frame):
         long_l_points = [(y, x) for x, y in l_points]  # Correct order for polyfit
 
         if long_l_points:
-            left_polynomial = fit_polynomial(long_l_points, order=2)
+            left_polynomial = fit_polynomial(long_l_points)
             if left_polynomial:
                 # ... (rest of the polynomial fitting and drawing logic - same as before)
                 min_y_left = min(p[0] for p in long_l_points)
@@ -219,7 +228,7 @@ def process_videos(frame):
         long_r_points = [(y, x) for x, y in r_points]
 
         if long_r_points:
-            right_polynomial = fit_polynomial(long_r_points, order=2)
+            right_polynomial = fit_polynomial(long_r_points)
             if right_polynomial:
                 # ... (rest of the polynomial fitting and drawing logic - same as before)
                 min_y_right = min(p[0] for p in long_r_points)

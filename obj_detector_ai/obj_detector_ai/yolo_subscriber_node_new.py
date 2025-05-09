@@ -20,7 +20,8 @@ class YoloSubscriberNode(Node):
         super().__init__('yolo_subscriber_node')
 
         # Load your trained YOLO model (update the path as needed)
-        self.model = YOLO('/home/redtoo/Documents/ws_redtoo/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/bestBERTO.pt')  # Example: '/home/user/best.pt'
+        # PATH TO COMMIT IS '/home/isc/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/bestBERTO.pt'
+        self.model = YOLO('/home/isc/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai/obj_detector_ai/weights/bestBERTO.pt')  # Example: '/home/user/best.pt'
         self.model.conf = 0.95  # Confidence threshold
 
         # Define drawing colors in BGR format

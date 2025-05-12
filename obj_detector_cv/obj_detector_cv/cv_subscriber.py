@@ -33,6 +33,8 @@ class CVsubscriberNode(Node):
         # self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
 
         self.subscription = self.create_subscription(Image, '/camera/mid/rgb/image_color', self.image_callback, 1)
+        self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
+
 
         # OpenCV Bridge
         self.bridge = CvBridge()
@@ -41,8 +43,15 @@ class CVsubscriberNode(Node):
 
     def image_callback(self, msg):
         """Process frames from ROS2 topic."""
-        frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-        height, width, channels = frame.shape
+        
+        if isinstance(msg, CompressedImage):
+            # Decode compressed
+            np_arr = np.frombuffer(msg.data, np.uint8)
+            frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        else:
+            # Raw Image
+            frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+            height, width, channels = frame.shape
         # frame_height, frame_width, _ = frame.shape
 
         # Run CV function

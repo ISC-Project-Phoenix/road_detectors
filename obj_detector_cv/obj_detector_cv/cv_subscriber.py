@@ -59,8 +59,6 @@ class CVsubscriberNode(Node):
         if poly_data is  None:
             self.get_logger().info("Insufficient contours!")
             return
-        left_coeffs = poly_data["left_coeffs"]
-        right_coeffs = poly_data["right_coeffs"]
         left_contours = poly_data["left_contours"]
         right_contours = poly_data["right_contours"]
 
@@ -76,12 +74,6 @@ class CVsubscriberNode(Node):
             reshaped = contour.reshape(-1, 2)
             for (x, y) in reshaped:
                 points_left.extend([float(x), float(y)])
-        
-        if not (np.any(left_coeffs) and np.any(right_coeffs)):
-            self.get_logger().info("No good lane polynomial found.")
-            # return when no good polynomials
-            return
-        average_coeffs = (left_coeffs + right_coeffs) / 2.0
         
         # make the custom msg and publich coefficients and contours
         # Process left contours
@@ -111,10 +103,9 @@ class CVsubscriberNode(Node):
         msg = Contours()
         msg.left_contour = vector3d_left_contours
         msg.right_contour = vector3d_right_contours
-        msg.center_poly = average_coeffs.astype(float).tolist()
 
 
-        mininium_threshold = 0.25 * height
+        mininium_threshold = 0.05 * height
 
         # check if the contours are bigger than the threshold\
         # we take the difference from the point farrest from the upper right corner and 
@@ -181,18 +172,7 @@ class CVsubscriberNode(Node):
         if into_the_edge_check:
             return
 
-        
-        # Create a ROS2 message and publish coefficients
-        coeff_msg = Float32MultiArray()
-        coeff_msg.data = average_coeffs.astype(float).tolist()
-                         #.astype(float).flatten().tolist()
-
-        # both publishers, for for centriods and one for the contours!
-        self.poly_coeff_publisher.publish(coeff_msg)
         self.contours_publisher.publish(msg)
-
-        # Log the coefficients
-        self.get_logger().info(f"Published Polynomial Coefficients: {average_coeffs}")
 
     
 

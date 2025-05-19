@@ -24,7 +24,7 @@ class CVsubscriberNode(Node):
         # ROS2 Image Publisher (processed output)
         # self.publisher = self.create_publisher(Image, 'processed_frames', 10)
         self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 1)
-        # self.contours_publisher = self.create_publisher(Contours, '/road/Contours', 1)
+        self.contours_publisher = self.create_publisher(Contours, '/road/Contours', 1)
 
         # TODO: Figure out how to subscribe correctly to compressed image
         # TODO: uncomment and fix
@@ -33,6 +33,8 @@ class CVsubscriberNode(Node):
         # self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
 
         self.subscription = self.create_subscription(Image, '/camera/mid/rgb/image_color', self.image_callback, 1)
+        self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
+
 
         # OpenCV Bridge
         self.bridge = CvBridge()
@@ -41,19 +43,28 @@ class CVsubscriberNode(Node):
 
     def image_callback(self, msg):
         """Process frames from ROS2 topic."""
-        frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+        
+        if isinstance(msg, CompressedImage):
+            # Decode compressed
+            np_arr = np.frombuffer(msg.data, np.uint8)
+            frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        else:
+            # Raw Image
+            frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+            height, width, channels = frame.shape
         # frame_height, frame_width, _ = frame.shape
 
         # Run CV function
         poly_data = process_videos(frame)
-        left_coeffs = poly_data["left_coeffs"]
-        right_coeffs = poly_data["right_coeffs"]
+        if poly_data is  None:
+            self.get_logger().info("Insufficient contours!")
+            return
         left_contours = poly_data["left_contours"]
         right_contours = poly_data["right_contours"]
 
         # flatten contours
         points_right = []
-        for contour in left_contours:
+        for contour in right_contours:
             reshaped = contour.reshape(-1, 2)
             for (x, y) in reshaped:
                 points_right.extend([float(x), float(y)])
@@ -64,12 +75,6 @@ class CVsubscriberNode(Node):
             for (x, y) in reshaped:
                 points_left.extend([float(x), float(y)])
         
-        if not (np.any(left_coeffs) and np.any(right_coeffs)):
-            self.get_logger().info("No good lane polynomial found.")
-            # return when no good polynomials
-            return
-        average_coeffs = (left_coeffs + right_coeffs) / 2.0
-
         # make the custom msg and publich coefficients and contours
         # Process left contours
         vector3d_left_contours = []
@@ -98,10 +103,9 @@ class CVsubscriberNode(Node):
         msg = Contours()
         msg.left_contour = vector3d_left_contours
         msg.right_contour = vector3d_right_contours
-        msg.center_poly = average_coeffs.astype(float).tolist()
 
 
-        mininium_threshold = 0.25 * height
+        mininium_threshold = 0.05 * height
 
         # check if the contours are bigger than the threshold\
         # we take the difference from the point farrest from the upper right corner and 
@@ -135,17 +139,40 @@ class CVsubscriberNode(Node):
             self.get_logger().info("mininium_threshold not met with left")
             return 
 
-        # Create a ROS2 message and publish coefficients
-        coeff_msg = Float32MultiArray()
-        coeff_msg.data = average_coeffs.astype(float).tolist()
-                         #.astype(float).flatten().tolist()
+        
+        # checks to see the contours interact with the edge of the screen
+        into_the_edge_check: bool = True;    # flag to trip
+        edge_percentage: float = 0.05;       # error margin for intersecting with the edge
+        # for left edge detection
+        for point in vector3d_left_contours:
+            # check the left edge
+            if point.x < width * edge_percentage:
+                into_the_edge_check = False;
+                break
+            # check the bottom edge
+            if point.y > height * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+            # check the right edge
+            if point.x > width * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+        # for the right edge
+        for point in vector3d_right_contours:
+            if point.x < width * edge_percentage:
+                into_the_edge_check = False;
+                break
+            if point.y > height * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+            if point.x > width * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
 
-        # both publishers, for for centriods and one for the contours!
-        self.poly_coeff_publisher.publish(coeff_msg)
-        # self.contours_publisher.publish(msg)
+        if into_the_edge_check:
+            return
 
-        # Log the coefficients
-        self.get_logger().info(f"Published Polynomial Coefficients: {average_coeffs}")
+        self.contours_publisher.publish(msg)
 
     
 

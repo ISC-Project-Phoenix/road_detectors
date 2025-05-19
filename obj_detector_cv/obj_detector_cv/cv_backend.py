@@ -1,9 +1,6 @@
 import cv2
 import numpy as np
 
-# Function to open a file dialog for video selection
-# we shouldnt be using this!
-
 # Function to mask green color to black in an HSV frame
 # nesscary
 def mask_green_to_black(hsv_frame, lower_green, upper_green):
@@ -43,7 +40,7 @@ def fit_polynomial(points, order=2):
     polynomial = np.poly1d(coeffs)  # Create a polynomial object
     return polynomial  # Return the polynomial object
 
-# Empty function used for trackbar callback
+# Empty function used for trackbar callback CANNOT REMOVE, FOR CV
 def nothing(x):
     """A dummy function used as a callback for trackbars."""
     pass  # Does nothing
@@ -61,22 +58,7 @@ def process_videos(frame):
     # Create a window for displaying the Processing Stages
     cv2.namedWindow("Processing Stages", cv2.WINDOW_NORMAL)
     # cv2.resizeWindow("Processing Stages", 1920, 720)  # Resize the window
-
-
-    # Create trackbars for controlling the lower and upper bounds of the green color
-    cv2.createTrackbar("ROI", "Processing Stages", 52,256,nothing)
-    cv2.createTrackbar("Lower H", "Processing Stages", 20, 179, nothing)
-    cv2.createTrackbar("Upper H", "Processing Stages", 52, 179, nothing)
-    cv2.createTrackbar("Lower S", "Processing Stages", 35, 255, nothing) #24
-    cv2.createTrackbar("Upper S", "Processing Stages", 255, 255, nothing)
-    cv2.createTrackbar("Lower V", "Processing Stages", 45, 255, nothing)
-    cv2.createTrackbar("Upper V", "Processing Stages", 255, 255, nothing)
-    cv2.createTrackbar("GaussianBlur Ksize", "Processing Stages", 13, 31, nothing)  # Odd values only
-    cv2.createTrackbar("Canny Low Threshold", "Processing Stages", 157, 255, nothing)
-    cv2.createTrackbar("Canny High Threshold", "Processing Stages", 43, 255, nothing)
-
-    paused = False  # Initialize pause flag
-
+    
     """
     TODO:
         remove while loop from scope. 
@@ -96,18 +78,19 @@ def process_videos(frame):
     hsv_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2HSV)  # Convert the frame to HSV
 
     # Get trackbar positions for color thresholds
-    roi_shade = cv2.getTrackbarPos("ROI", "Processing Stages")
-    lower_h = cv2.getTrackbarPos("Lower H", "Processing Stages")
-    upper_h = cv2.getTrackbarPos("Upper H", "Processing Stages")
-    lower_s = cv2.getTrackbarPos("Lower S", "Processing Stages")
-    upper_s = cv2.getTrackbarPos("Upper S", "Processing Stages")
-    lower_v = cv2.getTrackbarPos("Lower V", "Processing Stages")
-    upper_v = cv2.getTrackbarPos("Upper V", "Processing Stages")
-    gaussian_ksize = cv2.getTrackbarPos("GaussianBlur Ksize", "Processing Stages")
-    if gaussian_ksize % 2 == 0:
-        gaussian_ksize += 1
-    canny_low = cv2.getTrackbarPos("Canny Low Threshold", "Processing Stages")
-    canny_high = cv2.getTrackbarPos("Canny High Threshold", "Processing Stages")
+    roi_shade = 55 #cv2.getTrackbarPos("ROI", "Processing Stages")
+    roi_shade_lower = 20
+    lower_h = 20 #cv2.getTrackbarPos("Lower H", "Processing Stages")
+    upper_h = 110 #52 #cv2.getTrackbarPos("Upper H", "Processing Stages")
+    lower_s = 35 #cv2.getTrackbarPos("Lower S", "Processing Stages")
+    upper_s = 255 #cv2.getTrackbarPos("Upper S", "Processing Stages")
+    lower_v = 45 #cv2.getTrackbarPos("Lower V", "Processing Stages")
+    upper_v = 255 #cv2.getTrackbarPos("Upper V", "Processing Stages")
+    gaussian_ksize = 13 #cv2.getTrackbarPos("GaussianBlur Ksize", "Processing Stages")
+    #if gaussian_ksize % 2 == 0:
+    #    gaussian_ksize += 1
+    canny_low = 157 #cv2.getTrackbarPos("Canny Low Threshold", "Processing Stages")
+    canny_high = 43 #cv2.getTrackbarPos("Canny High Threshold", "Processing Stages")
 
     lower_green = np.array([lower_h, lower_s, lower_v])  # Define the lower green color bound
     upper_green = np.array([upper_h, upper_s, upper_v])  # Define the upper green color bound
@@ -164,9 +147,6 @@ def process_videos(frame):
     left_contours = []
     right_contours = []
 
-    long_r_points = []
-    long_l_points = []
-
     for contour in contours_sorted:
         contour_points = np.array(contour).reshape(-1, 2)
         avg_x = np.mean(contour_points[:, 0])  # Average x-coordinate of the contour
@@ -182,123 +162,10 @@ def process_videos(frame):
                                         reverse=True)[:1] if left_contours else []
     longest_right_contours = sorted(right_contours, key=lambda c: cv2.arcLength(c, True),
                                         reverse=True)[:1] if right_contours else []
-    mininium_threshold = height * 0.45;
-
+    
     if not longest_left_contours:
         return
-    
-    perimeter = cv2.arcLength(longest_left_contours[0], True)
-    if perimeter < mininium_threshold:
-        # self.get_logger().info("right mininium threshold not meet.")
-        return
 
-    # Process Left Contours:
-    for contour in longest_left_contours:
-        cv2.drawContours(edges_largest_two, [contour], -1, (255, 0, 0), 3)  # Draw left contours in blue
-        l_points = np.array(contour).reshape(-1, 2).tolist()  # Convert contour to list of points
-        long_l_points = [(y, x) for x, y in l_points]  # Correct order for polyfit
-
-        if long_l_points:
-            left_polynomial = fit_polynomial(long_l_points)
-            if left_polynomial:
-                # ... (rest of the polynomial fitting and drawing logic - same as before)
-                min_y_left = min(p[0] for p in long_l_points)
-                max_y_left = max(p[0] for p in long_l_points)
-                y_vals_left = np.linspace(min_y_left, max_y_left, 500)
-                x_vals_left = left_polynomial(y_vals_left)
-
-                valid_indices_left = (x_vals_left >= 0) & (x_vals_left < frame_resized.shape[1]) & (
-                        y_vals_left >= 0) & (y_vals_left < frame_resized.shape[0])
-                x_vals_left = x_vals_left[valid_indices_left]
-                y_vals_left = y_vals_left[valid_indices_left]
-
-                curve_points_left = np.array(list(zip(x_vals_left.astype(int), y_vals_left.astype(int))),
-                                                np.int32)
-                curve_points_left = curve_points_left.reshape((-1, 1, 2))
-
-                if curve_points_left.size > 0:
-                    cv2.polylines(polynomial_frame, [curve_points_left], isClosed=False,
-                                    color=(255, 255, 0),
-                                    thickness=3)
-
-    # Process Right Contours (same structure as left):
-    for contour in longest_right_contours:
-        cv2.drawContours(edges_largest_two, [contour], -1, (0, 0, 255), 3)  # Draw right contours in red
-        r_points = np.array(contour).reshape(-1, 2).tolist()
-        long_r_points = [(y, x) for x, y in r_points]
-
-        if long_r_points:
-            right_polynomial = fit_polynomial(long_r_points)
-            if right_polynomial:
-                # ... (rest of the polynomial fitting and drawing logic - same as before)
-                min_y_right = min(p[0] for p in long_r_points)
-                max_y_right = max(p[0] for p in long_r_points)
-                y_vals_right = np.linspace(min_y_right, max_y_right, 500)
-                x_vals_right = right_polynomial(y_vals_right)
-
-                valid_indices_right = (x_vals_right >= 0) & (x_vals_right < frame_resized.shape[1]) & (
-                        y_vals_right >= 0) & (y_vals_right < frame_resized.shape[0])
-                x_vals_right = x_vals_right[valid_indices_right]
-                y_vals_right = y_vals_right[valid_indices_right]
-
-                curve_points_right = np.array(list(zip(x_vals_right.astype(int), y_vals_right.astype(int))),
-                                                np.int32)
-                curve_points_right = curve_points_right.reshape((-1, 1, 2))
-
-                if curve_points_right.size > 0:
-                    cv2.polylines(polynomial_frame, [curve_points_right], isClosed=False,
-                                    color=(255, 255, 0),
-                                    thickness=3)
-
-    # Get coefficients or fallback to zeros
-    # for order change np.zeros() to the correct array length!
-    left_coeffs = left_polynomial.coeffs if 'left_polynomial' in locals() and left_polynomial is not None else np.zeros(3)
-    right_coeffs = right_polynomial.coeffs if 'right_polynomial' in locals() and right_polynomial is not None else np.zeros(3)
-    
-
-
-    if (np.any(left_coeffs) and np.any(right_coeffs)):
-        average_coeffs = (left_coeffs + right_coeffs) / 2.0
-        
-        # Determine which contour to use based on arc length
-        if longest_right_contours and longest_left_contours:
-            right_length = cv2.arcLength(longest_right_contours[0], False)
-            left_length = cv2.arcLength(longest_left_contours[0], False)
-            longest_contour = longest_right_contours[0] if right_length > left_length else longest_left_contours[0]
-        elif longest_right_contours:
-            longest_contour = longest_right_contours[0]
-        elif longest_left_contours:
-            longest_contour = longest_left_contours[0]
-        else:
-            longest_contour = None
-
-        if longest_contour is not None:
-            # Convert contour to numpy array and reshape
-            contour_points = np.array(longest_contour).reshape(-1, 2)
-            
-            contour_points = np.array(contour_points).reshape(-1, 2)
-            y_points = contour_points[:, 1]  # Using y-values as input
-            
-            # Evaluate x = f(y) using the polynomial
-            x_points = np.polyval(average_coeffs, y_points)
-            
-            # Combine and format for OpenCV
-            curve_points_middle = np.column_stack((x_points, y_points)).astype(np.int32)
-            curve_points_middle = curve_points_middle.reshape((-1, 1, 2))
-            
-            # Draw debug points (red circles) to verify positions
-            for point in curve_points_middle[:,0,:]:
-                cv2.circle(polynomial_frame, tuple(point), 3, (0,0,255), -1)
-            
-            # Draw the curve if we have valid points
-            if curve_points_middle.size > 0:
-                cv2.polylines(
-                    polynomial_frame,
-                    [curve_points_middle],
-                    isClosed=False,
-                    color=(255, 255, 155),  # Yellow
-                    thickness=3
-                )
 
 
     combined_frame = np.hstack([
@@ -310,13 +177,11 @@ def process_videos(frame):
     ])
 
     cv2.imshow("Processing Stages", combined_frame)
-    cv2.imshow("Output", polynomial_frame)
-    cv2.imshow("Original Frame", frame_resized)
+    #cv2.imshow("Output", polynomial_frame)
+    #cv2.imshow("Original Frame", frame_resized)
 
     cv2.waitKey(1)
     return {
-        "left_contours": left_contours,
-        "right_contours": right_contours,
-        "left_coeffs": left_coeffs,
-        "right_coeffs": right_coeffs
+        "left_contours": longest_left_contours,
+        "right_contours": longest_right_contours,
     }

@@ -142,7 +142,6 @@ def process_videos(frame):
     contours_sorted = sorted(contours, key=lambda c: cv2.arcLength(c, True), reverse=True)
 
     edges_largest_two = np.zeros_like(closed_edges)  # Keep this for visualization
-    polynomial_frame = frame_resized.copy()
 
     left_contours = []
     right_contours = []
@@ -172,12 +171,10 @@ def process_videos(frame):
         frame_resized,
         cv2.cvtColor(green_mask, cv2.COLOR_GRAY2BGR),  # Convert green_mask to BGR
         closed_edges,
-        edges_largest_two,
-        polynomial_frame
+        edges_largest_two
     ])
 
     cv2.imshow("Processing Stages", combined_frame)
-    #cv2.imshow("Output", polynomial_frame)
     #cv2.imshow("Original Frame", frame_resized)
 
     cv2.waitKey(1)

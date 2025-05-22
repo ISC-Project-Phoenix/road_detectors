@@ -51,8 +51,9 @@ class CVsubscriberNode(Node):
         else:
             # Raw Image
             frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-            height, width, channels = frame.shape
+            
         # frame_height, frame_width, _ = frame.shape
+        height, width, channels = frame.shape
 
         # Run CV function
         poly_data = process_videos(frame)
@@ -170,8 +171,9 @@ class CVsubscriberNode(Node):
                 break
 
         if into_the_edge_check:
+            self.get_logger().info("fail edge check")
             return
-
+        self.get_logger().info("Sucess for node!")
         self.contours_publisher.publish(msg)
 
     

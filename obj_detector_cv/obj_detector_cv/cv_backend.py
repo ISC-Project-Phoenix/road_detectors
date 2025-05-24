@@ -79,12 +79,12 @@ def process_videos(frame):
 
     # Get trackbar positions for color thresholds
     roi_shade = 52 #cv2.getTrackbarPos("ROI", "Processing Stages")
-    lower_h = 20 #cv2.getTrackbarPos("Lower H", "Processing Stages")
-    upper_h = 110 #52 #cv2.getTrackbarPos("Upper H", "Processing Stages")
-    lower_s = 35 #cv2.getTrackbarPos("Lower S", "Processing Stages")
-    upper_s = 255 #cv2.getTrackbarPos("Upper S", "Processing Stages")
-    lower_v = 45 #cv2.getTrackbarPos("Lower V", "Processing Stages")
-    upper_v = 255 #cv2.getTrackbarPos("Upper V", "Processing Stages")
+    lower_h = 186 #cv2.getTrackbarPos("Lower H", "Processing Stages")
+    upper_h = 255 #52 #cv2.getTrackbarPos("Upper H", "Processing Stages")
+    lower_s = 10 #cv2.getTrackbarPos("Lower S", "Processing Stages")
+    upper_s = 110 #cv2.getTrackbarPos("Upper S", "Processing Stages")
+    lower_v = 30 #cv2.getTrackbarPos("Lower V", "Processing Stages")
+    upper_v = 120 #cv2.getTrackbarPos("Upper V", "Processing Stages")
     gaussian_ksize = 13 #cv2.getTrackbarPos("GaussianBlur Ksize", "Processing Stages")
     #if gaussian_ksize % 2 == 0:
     #    gaussian_ksize += 1

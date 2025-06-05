@@ -5,9 +5,7 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Float32MultiArray
 from cv_bridge import CvBridge
 import cv2
-from ultralytics import YOLO
 import numpy as np
-import time
 from obj_detector_cv.cv_backend import process_videos
 from  phnx_msgs.msg import Contours
 from geometry_msgs.msg import Vector3

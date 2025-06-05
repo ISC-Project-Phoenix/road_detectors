@@ -1,0 +1,62 @@
+[0.526s] Invoking command in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai': PYTHONPATH=/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/obj_detector_ai build --build-base /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build install --record /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log --single-version-externally-managed install_data
+[0.663s] running egg_info
+[0.663s] creating ../build/obj_detector_ai/obj_detector_ai.egg-info
+[0.663s] writing ../build/obj_detector_ai/obj_detector_ai.egg-info/PKG-INFO
+[0.663s] writing dependency_links to ../build/obj_detector_ai/obj_detector_ai.egg-info/dependency_links.txt
+[0.663s] writing entry points to ../build/obj_detector_ai/obj_detector_ai.egg-info/entry_points.txt
+[0.663s] writing requirements to ../build/obj_detector_ai/obj_detector_ai.egg-info/requires.txt
+[0.663s] writing top-level names to ../build/obj_detector_ai/obj_detector_ai.egg-info/top_level.txt
+[0.663s] writing manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+[0.664s] reading manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+[0.665s] writing manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+[0.665s] running build
+[0.665s] running build_py
+[0.665s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build
+[0.665s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib
+[0.665s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[0.665s] copying obj_detector_ai/save_img.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[0.665s] copying obj_detector_ai/yolo_publisher_node.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[0.665s] copying obj_detector_ai/obj_detector_ai.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[0.665s] copying obj_detector_ai/yolo_subscriber_node_new.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[0.665s] copying obj_detector_ai/__init__.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+[0.665s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+[0.665s] copying obj_detector_ai/weights/last.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+[0.683s] copying obj_detector_ai/weights/best.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+[0.701s] copying obj_detector_ai/weights/bestJ.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+[0.704s] copying obj_detector_ai/weights/bestBERTO.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+[0.723s] running install
+[0.723s] running install_lib
+[0.723s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[0.723s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/save_img.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[0.724s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/yolo_publisher_node.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[0.724s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/obj_detector_ai.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[0.724s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/yolo_subscriber_node_new.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[0.724s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/__init__.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+[0.724s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+[0.724s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights/last.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+[0.741s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights/best.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+[0.759s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights/bestJ.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+[0.761s] copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights/bestBERTO.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+[0.778s] byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/save_img.py to save_img.cpython-310.pyc
+[0.779s] byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/yolo_publisher_node.py to yolo_publisher_node.cpython-310.pyc
+[0.779s] byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/obj_detector_ai.py to obj_detector_ai.cpython-310.pyc
+[0.779s] byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/yolo_subscriber_node_new.py to yolo_subscriber_node_new.cpython-310.pyc
+[0.780s] byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/__init__.py to __init__.cpython-310.pyc
+[0.780s] running install_data
+[0.780s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index
+[0.780s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index
+[0.780s] creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index/packages
+[0.780s] copying resource/obj_detector_ai -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index/packages
+[0.780s] copying package.xml -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai
+[0.780s] running install_egg_info
+[0.781s] Copying ../build/obj_detector_ai/obj_detector_ai.egg-info to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai-0.0.0-py3.10.egg-info
+[0.781s] running install_scripts
+[0.793s] Installing image_publisher_node script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[0.793s] Installing image_publisher_nodeTest script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[0.793s] Installing image_save_node script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[0.793s] Installing obj_detector_ai script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[0.793s] Installing yolo_publisher_node script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[0.794s] Installing yolo_subscriber_node script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[0.794s] Installing yolo_subscriber_node_new script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+[0.794s] writing list of installed files to '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log'
+[0.805s] Invoked command in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai' returned '0': PYTHONPATH=/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/obj_detector_ai build --build-base /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build install --record /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log --single-version-externally-managed install_data

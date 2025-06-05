@@ -1,0 +1,196 @@
+import cv2
+import numpy as np
+
+# Function to mask green color to black in an HSV frame
+# nesscary
+def mask_green_to_black(hsv_frame, lower_green, upper_green):
+    """Masks green pixels in an HSV frame and replaces them with black.
+
+    Args:
+        hsv_frame: The input HSV frame.
+        lower_green: The lower bound for the green color in HSV.
+        upper_green: The upper bound for the green color in HSV.
+
+    Returns:
+        A tuple containing the masked frame and the green mask.
+    """
+    green_mask = cv2.inRange(hsv_frame, lower_green, upper_green)  # Create a mask for green pixels
+    result_frame = hsv_frame.copy() # Copy the original frame to avoid modifying it directly
+    black_hsv = np.array([0, 0, 0]) # Define black color in HSV
+    result_frame[green_mask == 255] = black_hsv # Replace green pixels with black
+    return result_frame, green_mask # Return the masked frame and the mask
+
+# Function to fit a polynomial to a set of points
+# very useful!
+def fit_polynomial(points, order=2):
+    """Fits a polynomial of a given order to a set of points.
+
+    Args:
+        points: A list of (y, x) tuples representing the points.
+        order: The order of the polynomial to fit.
+
+    Returns:
+        A numpy.poly1d object representing the polynomial, or None if there are not enough points.
+    """
+    if len(points) < order + 1: # Check if there are enough points to fit the polynomial
+        return None # Return None if not enough points
+    x = [p[1] for p in points] # Extract x-coordinates
+    y = [p[0] for p in points] # Extract y-coordinates
+    coeffs = np.polyfit(y, x, order) # Fit a polynomial to the points (y as function of x)
+    return np.poly1d(coeffs) # Create and return a polynomial object
+
+# Empty function used for trackbar callback CANNOT REMOVE, FOR CV
+def nothing(x):
+    """A dummy function used as a callback for trackbars."""
+    pass # Does nothing
+
+# Setup trackbars (call this once in your main script)
+cv2.namedWindow("Processing Stages", cv2.WINDOW_NORMAL)
+cv2.createTrackbar("ROI", "Processing Stages", 55, 100, nothing)
+cv2.createTrackbar("Lower H", "Processing Stages", 20, 180, nothing)
+cv2.createTrackbar("Upper H", "Processing Stages", 110, 180, nothing)
+cv2.createTrackbar("Lower S", "Processing Stages", 35, 255, nothing)
+cv2.createTrackbar("Upper S", "Processing Stages", 255, 255, nothing)
+cv2.createTrackbar("Lower V", "Processing Stages", 45, 255, nothing)
+cv2.createTrackbar("Upper V", "Processing Stages", 255, 255, nothing)
+cv2.createTrackbar("GaussianBlur Ksize", "Processing Stages", 13, 31, nothing)
+cv2.createTrackbar("Canny Low Threshold", "Processing Stages", 157, 255, nothing)
+cv2.createTrackbar("Canny High Threshold", "Processing Stages", 43, 255, nothing)
+
+# Function to process the video(s)
+# TODO process return image!
+def process_videos(frame):
+    """Processes the video(s) to detect lane lines.
+
+    Args:
+        video_paths: A list of paths to the video files.
+    """
+    # TODO Rework for cv::Images!
+
+    # Create a window for displaying the Processing Stages
+    
+    cv2.namedWindow("Processing Stages", cv2.WINDOW_NORMAL)
+    # cv2.resizeWindow("Processing Stages", 1920, 720)  # Resize the window
+    
+    """
+    TODO:
+        remove while loop from scope. 
+        remove for loop for video frames
+        convert all frames into single use!
+    """
+
+    # resize frame!
+    # frame_resized = cv2.resize(frame, (640, 480))  # Resize the frame for processing
+    # height, width = frame_resized.shape[:2]  # Get the height and width of the frame
+
+    # DO NOT THE FRAME
+
+    frame_resized = frame
+    height, width = frame_resized.shape[:2] # Get the height and width of the frame
+    hsv_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2HSV) # Convert the frame to HSV
+
+    # Read values from trackbars
+    roi_shade = cv2.getTrackbarPos("ROI", "Processing Stages")
+    lower_h = cv2.getTrackbarPos("Lower H", "Processing Stages")
+    upper_h = cv2.getTrackbarPos("Upper H", "Processing Stages")
+    lower_s = cv2.getTrackbarPos("Lower S", "Processing Stages")
+    upper_s = cv2.getTrackbarPos("Upper S", "Processing Stages")
+    lower_v = cv2.getTrackbarPos("Lower V", "Processing Stages")
+    upper_v = cv2.getTrackbarPos("Upper V", "Processing Stages")
+    gaussian_ksize = cv2.getTrackbarPos("GaussianBlur Ksize", "Processing Stages")
+    canny_low = cv2.getTrackbarPos("Canny Low Threshold", "Processing Stages")
+    canny_high = cv2.getTrackbarPos("Canny High Threshold", "Processing Stages")
+
+    if gaussian_ksize % 2 == 0:
+        gaussian_ksize += 1
+    if gaussian_ksize < 3:
+        gaussian_ksize = 3
+
+    lower_green = np.array([lower_h, lower_s, lower_v]) # Define the lower green color bound
+    upper_green = np.array([upper_h, upper_s, upper_v]) # Define the upper green color bound
+
+    masked_frame, green_mask = mask_green_to_black(hsv_frame, lower_green, upper_green) # Mask the green color
+    result_bgr = cv2.cvtColor(masked_frame, cv2.COLOR_HSV2BGR) # Convert the masked frame back to BGR
+    green_bgr = cv2.cvtColor(green_mask, cv2.COLOR_GRAY2BGR) # Convert the mask to BGR
+
+    # Create a mask to only process the lower part of the image
+    mask_start = int(height * (roi_shade / 100.0)) # Start masking from 48% of the image height
+    mask = np.zeros_like(result_bgr) # Create a mask of zeros
+    mask[mask_start:, :] = 255 # Set the lower part of the mask to 255 (white)
+    
+    edge_mask_start = int(height * (roi_shade / 100.0))
+    edgemask = np.zeros_like(result_bgr)
+    edgemask[edge_mask_start:, :] = 255
+
+    # Create the bumper mask (INVERSE)
+    bumper_mask_size = 100 # Adjust the size as needed
+    bumper_mask = np.ones_like(result_bgr, dtype=np.uint8) * 255 # initialize to white
+    bumper_mask_x = width // 2 - bumper_mask_size // 2
+    bumper_mask_y = height - bumper_mask_size
+    bumper_mask[bumper_mask_y:bumper_mask_y + bumper_mask_size,
+                 bumper_mask_x:bumper_mask_x + bumper_mask_size] = 0 # set the bumper part to black.
+
+    #roi_frame = cv2.bitwise_and(result_bgr, mask)  # Apply the mask to the masked frame
+    roi_green = cv2.bitwise_and(green_bgr, mask) # Apply the mask to rgb'ed green_mask
+    roi = cv2.bitwise_and(roi_green, bumper_mask)
+
+    # blurred_frame = cv2.GaussianBlur(roi_frame, (25, 25), 0)
+    # edges = cv2.Canny(blurred_frame, 90, 180)
+    blurred_frame = cv2.GaussianBlur(roi, (gaussian_ksize, gaussian_ksize), 0) # Apply Gaussian blur to the ROI of the green mask
+    edges = cv2.Canny(blurred_frame, canny_low, canny_high) # Apply Canny edge detection to the blurred frame
+    edges_bgr = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR) # Convert the edges to BGR for display
+    roi_edges = cv2.bitwise_and(edges_bgr, edgemask) # Apply the edge mask.
+
+    # 1. Morphological Closing to Join Broken Edges:
+    kernel = np.ones((3, 3), np.uint8) # Define a kernel for morphological operations (5x5 square)
+    closed_edges = cv2.morphologyEx(roi_edges, cv2.MORPH_CLOSE, kernel) # Perform morphological closing to close gaps in edges
+    closed_edges_gray = cv2.cvtColor(closed_edges, cv2.COLOR_BGR2GRAY) # Convert closed edges to grayscale
+
+    # 2. Find Contours and Separate Left/Right:
+    contours, _ = cv2.findContours(closed_edges_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours_sorted = sorted(contours, key=lambda c: cv2.arcLength(c, True), reverse=True)
+
+    edges_largest_two = np.zeros_like(closed_edges) # Keep this for visualization
+    left_contours = []
+    right_contours = []
+
+    for contour in contours_sorted:
+        contour_points = np.array(contour).reshape(-1, 2)
+        avg_x = np.mean(contour_points[:, 0]) # Average x-coordinate of the contour
+        if avg_x < width // 2:
+            left_contours.append(contour)
+        else:
+            right_contours.append(contour)
+
+    # Find the longest left and right contours:
+    longest_left_contours = sorted(left_contours, key=lambda c: cv2.arcLength(c, True), reverse=True)[:1] if left_contours else []
+    longest_right_contours = sorted(right_contours, key=lambda c: cv2.arcLength(c, True), reverse=True)[:1] if right_contours else []
+
+    if not longest_left_contours:
+        return
+
+    # Copy blank image to draw on
+    edges_largest_two = np.zeros_like(closed_edges)
+
+    # Draw left contour(s) in blue
+    cv2.drawContours(edges_largest_two, longest_left_contours, -1, (255, 0, 0), 2)
+
+    # Draw right contour(s) in red
+    cv2.drawContours(edges_largest_two, longest_right_contours, -1, (0, 0, 255), 2)
+
+    combined_frame = np.hstack([
+        frame_resized,
+        cv2.cvtColor(green_mask, cv2.COLOR_GRAY2BGR), # Convert green_mask to BGR
+        closed_edges,
+        edges_largest_two
+    ])
+
+    cv2.imshow("Processing Stages", combined_frame)
+    #cv2.imshow("Original Frame", frame_resized)
+    
+    cv2.waitKey(1)
+
+    return {
+        "left_contours": longest_left_contours,
+        "right_contours": longest_right_contours,
+    }

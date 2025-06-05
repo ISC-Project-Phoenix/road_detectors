@@ -51,10 +51,9 @@ class CVsubscriberNode(Node):
         else:
             # Raw Image
             frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-            
         # frame_height, frame_width, _ = frame.shape
-        height, width, channels = frame.shape
 
+        height, width, channels = frame.shape
         # Run CV function
         poly_data = process_videos(frame)
         if poly_data is  None:

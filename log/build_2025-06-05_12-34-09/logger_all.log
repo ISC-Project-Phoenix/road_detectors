@@ -1,0 +1,174 @@
+[0.062s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.062s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=32, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7aabbf212d40>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7aabbf212800>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7aabbf212800>>)
+[0.155s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.155s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.155s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.155s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.155s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.155s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.155s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.155s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.161s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.161s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.161s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.161s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.161s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extensions ['ignore', 'ignore_ament_install']
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extension 'ignore'
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extension 'ignore_ament_install'
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extensions ['colcon_pkg']
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extension 'colcon_pkg'
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extensions ['colcon_meta']
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extension 'colcon_meta'
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extensions ['ros']
+[0.162s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_ai) by extension 'ros'
+[0.164s] DEBUG:colcon.colcon_core.package_identification:Package 'obj_detector_ai' with type 'ros.ament_python' and name 'obj_detector_ai'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extensions ['ignore', 'ignore_ament_install']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extension 'ignore'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extension 'ignore_ament_install'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extensions ['colcon_pkg']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extension 'colcon_pkg'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extensions ['colcon_meta']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extension 'colcon_meta'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extensions ['ros']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(obj_detector_cv) by extension 'ros'
+[0.165s] DEBUG:colcon.colcon_core.package_identification:Package 'obj_detector_cv' with type 'ros.ament_python' and name 'obj_detector_cv'
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.165s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.181s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.181s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.182s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 27 installed packages in /home/fazal/Documents/dev/phnx_ws/install
+[0.183s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 2 installed packages in /home/fazal/ros2_ws/install
+[0.183s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 324 installed packages in /opt/ros/humble
+[0.184s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.207s] WARNING:colcon.colcon_core.package_selection:Some selected packages are already built in one or more underlay workspaces:
+	'obj_detector_cv' is in: /home/fazal/Documents/dev/phnx_ws/install/obj_detector_cv
+	'obj_detector_ai' is in: /home/fazal/Documents/dev/phnx_ws/install/obj_detector_ai
+If a package in a merged underlay workspace is overridden and it installs headers, then all packages in the overlay must sort their include directories by workspace order. Failure to do so may result in build failures or undefined behavior at run time.
+If the overridden package is used by another package in any underlay, then the overriding package in the overlay must be API and ABI compatible or undefined behavior at run time may occur.
+
+If you understand the risks and want to override a package anyways, add the following to the command line:
+	--allow-overriding obj_detector_ai obj_detector_cv
+
+This may be promoted to an error in a future release of colcon-override-check.
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'cmake_args' from command line to 'None'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'cmake_target' from command line to 'None'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'cmake_clean_cache' from command line to 'False'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'cmake_clean_first' from command line to 'False'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'cmake_force_configure' from command line to 'False'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'ament_cmake_args' from command line to 'None'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'catkin_cmake_args' from command line to 'None'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_ai' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.208s] DEBUG:colcon.colcon_core.verb:Building package 'obj_detector_ai' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai', 'merge_install': False, 'path': '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai', 'symlink_install': False, 'test_result_base': None}
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'cmake_args' from command line to 'None'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'cmake_target' from command line to 'None'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'cmake_clean_cache' from command line to 'False'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'cmake_clean_first' from command line to 'False'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'cmake_force_configure' from command line to 'False'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'ament_cmake_args' from command line to 'None'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'catkin_cmake_args' from command line to 'None'
+[0.208s] Level 5:colcon.colcon_core.verb:set package 'obj_detector_cv' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.208s] DEBUG:colcon.colcon_core.verb:Building package 'obj_detector_cv' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_cv', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv', 'merge_install': False, 'path': '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_cv', 'symlink_install': False, 'test_result_base': None}
+[0.208s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.209s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.209s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai' with build type 'ament_python'
+[0.209s] Level 1:colcon.colcon_core.shell:create_environment_hook('obj_detector_ai', 'ament_prefix_path')
+[0.210s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.211s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/hook/ament_prefix_path.ps1'
+[0.211s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/hook/ament_prefix_path.dsv'
+[0.211s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/hook/ament_prefix_path.sh'
+[0.211s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.212s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.214s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_cv' with build type 'ament_python'
+[0.214s] Level 1:colcon.colcon_core.shell:create_environment_hook('obj_detector_cv', 'ament_prefix_path')
+[0.214s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/hook/ament_prefix_path.ps1'
+[0.215s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/hook/ament_prefix_path.dsv'
+[0.215s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/hook/ament_prefix_path.sh'
+[0.215s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.215s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.372s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai'
+[0.372s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.372s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.514s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_cv'
+[0.515s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.515s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.720s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_cv': PYTHONPATH=/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_cv/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/obj_detector_cv build --build-base /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_cv/build install --record /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_cv/install.log --single-version-externally-managed install_data
+[0.735s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai': PYTHONPATH=/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/obj_detector_ai build --build-base /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build install --record /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log --single-version-externally-managed install_data
+[0.886s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_cv' returned '0': PYTHONPATH=/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_cv/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/obj_detector_cv build --build-base /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_cv/build install --record /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_cv/install.log --single-version-externally-managed install_data
+[0.888s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv' for CMake module files
+[0.889s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv' for CMake config files
+[0.889s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/lib'
+[0.889s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/bin'
+[0.889s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/lib/pkgconfig/obj_detector_cv.pc'
+[0.889s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/lib/python3.10/site-packages'
+[0.889s] Level 1:colcon.colcon_core.shell:create_environment_hook('obj_detector_cv', 'pythonpath')
+[0.890s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/hook/pythonpath.ps1'
+[0.890s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/hook/pythonpath.dsv'
+[0.890s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/hook/pythonpath.sh'
+[0.891s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/bin'
+[0.891s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(obj_detector_cv)
+[0.891s] INFO:colcon.colcon_core.shell:Creating package script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/package.ps1'
+[0.891s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/package.dsv'
+[0.892s] INFO:colcon.colcon_core.shell:Creating package script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/package.sh'
+[0.892s] INFO:colcon.colcon_core.shell:Creating package script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/package.bash'
+[0.893s] INFO:colcon.colcon_core.shell:Creating package script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/obj_detector_cv/package.zsh'
+[0.894s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_cv/share/colcon-core/packages/obj_detector_cv)
+[1.014s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai' for CMake module files
+[1.015s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/obj_detector_ai' returned '0': PYTHONPATH=/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/obj_detector_ai build --build-base /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build install --record /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log --single-version-externally-managed install_data
+[1.015s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai' for CMake config files
+[1.015s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib'
+[1.015s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/bin'
+[1.015s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/pkgconfig/obj_detector_ai.pc'
+[1.016s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages'
+[1.016s] Level 1:colcon.colcon_core.shell:create_environment_hook('obj_detector_ai', 'pythonpath')
+[1.016s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/hook/pythonpath.ps1'
+[1.016s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/hook/pythonpath.dsv'
+[1.016s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/hook/pythonpath.sh'
+[1.017s] Level 1:colcon.colcon_core.environment:checking '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/bin'
+[1.017s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(obj_detector_ai)
+[1.017s] INFO:colcon.colcon_core.shell:Creating package script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/package.ps1'
+[1.017s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/package.dsv'
+[1.018s] INFO:colcon.colcon_core.shell:Creating package script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/package.sh'
+[1.018s] INFO:colcon.colcon_core.shell:Creating package script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/package.bash'
+[1.018s] INFO:colcon.colcon_core.shell:Creating package script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai/package.zsh'
+[1.018s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/colcon-core/packages/obj_detector_ai)
+[1.018s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[1.018s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[1.018s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[1.018s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[1.021s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[1.021s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[1.021s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[1.030s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[1.030s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/local_setup.ps1'
+[1.030s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/_local_setup_util_ps1.py'
+[1.031s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/setup.ps1'
+[1.032s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/local_setup.sh'
+[1.032s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/_local_setup_util_sh.py'
+[1.032s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/setup.sh'
+[1.033s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/local_setup.bash'
+[1.033s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/setup.bash'
+[1.034s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/local_setup.zsh'
+[1.035s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/setup.zsh'

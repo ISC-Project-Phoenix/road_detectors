@@ -1,0 +1,5 @@
+cv_bridge
+opencv-python
+setuptools
+torch
+ultralytics

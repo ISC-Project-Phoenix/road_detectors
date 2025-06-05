@@ -1,0 +1,60 @@
+running egg_info
+creating ../build/obj_detector_ai/obj_detector_ai.egg-info
+writing ../build/obj_detector_ai/obj_detector_ai.egg-info/PKG-INFO
+writing dependency_links to ../build/obj_detector_ai/obj_detector_ai.egg-info/dependency_links.txt
+writing entry points to ../build/obj_detector_ai/obj_detector_ai.egg-info/entry_points.txt
+writing requirements to ../build/obj_detector_ai/obj_detector_ai.egg-info/requires.txt
+writing top-level names to ../build/obj_detector_ai/obj_detector_ai.egg-info/top_level.txt
+writing manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+reading manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+writing manifest file '../build/obj_detector_ai/obj_detector_ai.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+copying obj_detector_ai/save_img.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+copying obj_detector_ai/yolo_publisher_node.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+copying obj_detector_ai/obj_detector_ai.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+copying obj_detector_ai/yolo_subscriber_node_new.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+copying obj_detector_ai/__init__.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+copying obj_detector_ai/weights/last.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+copying obj_detector_ai/weights/best.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+copying obj_detector_ai/weights/bestJ.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+copying obj_detector_ai/weights/bestBERTO.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights
+running install
+running install_lib
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/save_img.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/yolo_publisher_node.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/obj_detector_ai.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/yolo_subscriber_node_new.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/__init__.py -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights/last.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights/best.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights/bestJ.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+copying /home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/build/lib/obj_detector_ai/weights/bestBERTO.pt -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/weights
+byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/save_img.py to save_img.cpython-310.pyc
+byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/yolo_publisher_node.py to yolo_publisher_node.cpython-310.pyc
+byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/obj_detector_ai.py to obj_detector_ai.cpython-310.pyc
+byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/yolo_subscriber_node_new.py to yolo_subscriber_node_new.cpython-310.pyc
+byte-compiling /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index
+creating /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index/packages
+copying resource/obj_detector_ai -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/ament_index/resource_index/packages
+copying package.xml -> /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/share/obj_detector_ai
+running install_egg_info
+Copying ../build/obj_detector_ai/obj_detector_ai.egg-info to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/python3.10/site-packages/obj_detector_ai-0.0.0-py3.10.egg-info
+running install_scripts
+Installing image_publisher_node script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+Installing image_publisher_nodeTest script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+Installing image_save_node script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+Installing obj_detector_ai script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+Installing yolo_publisher_node script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+Installing yolo_subscriber_node script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+Installing yolo_subscriber_node_new script to /home/fazal/Documents/dev/phnx_ws/src/road_detectors/install/obj_detector_ai/lib/obj_detector_ai
+writing list of installed files to '/home/fazal/Documents/dev/phnx_ws/src/road_detectors/build/obj_detector_ai/install.log'

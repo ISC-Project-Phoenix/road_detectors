@@ -1,6 +1,0 @@
-[console_scripts]
-cv_backend = obj_detector_cv.cv_backend:main
-cv_publisher = obj_detector_cv.cv_publisher:main
-cv_subscriber = obj_detector_cv.cv_subscriber:main
-obj_detector_cv = obj_detector_cv.obj_detector_cv:main
-

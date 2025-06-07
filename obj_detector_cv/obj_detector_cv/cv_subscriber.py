@@ -1,155 +1,188 @@
 import rclpy
 from rclpy.node import Node
+from sensor_msgs.msg import CompressedImage
 from sensor_msgs.msg import Image
+from std_msgs.msg import Float32MultiArray
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
-from ultralytics import YOLO
-from scipy.interpolate import UnivariateSpline
+from obj_detector_cv.cv_backend import process_videos
+from  phnx_msgs.msg import Contours
 from geometry_msgs.msg import Vector3
-from phnx_msgs.msg import Contours
+
+
 
 class CVsubscriberNode(Node):
     def __init__(self):
-        super().__init__('yolo_lane_overlay_node')
+        super().__init__('cv_subscriber')
 
-        # subscribe to camera topic
-        self.subscription = self.create_subscription(
-            Image,
-            '/camera/mid/rgb/image_color',
-            self.image_callback,
-            10
-        )
+        # ROS2 Image Subscriber (input frames)
+        # self.it = ImageTransport(self)
 
-        # publisher for contour vectors
+        # ROS2 Image Publisher (processed output)
+        # self.publisher = self.create_publisher(Image, 'processed_frames', 10)
+        self.poly_coeff_publisher = self.create_publisher(Float32MultiArray, '/road/polynomial', 1)
         self.contours_publisher = self.create_publisher(Contours, '/road/Contours', 1)
 
+        # TODO: Figure out how to subscribe correctly to compressed image
+        # TODO: uncomment and fix
+        # self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed', self.image_callback, 10)
+        
+        # self.it.subscribe('/camera/mid/rgb', self.listener_callback, 'compressed')
+
+        self.subscription = self.create_subscription(Image, '/camera/mid/rgb/image_color', self.image_callback, 1)
+        self.subscription = self.create_subscription(CompressedImage, '/camera/mid/rgb/compressed',self.image_callback, 10)
+
+
+        # OpenCV Bridge
         self.bridge = CvBridge()
-        # load your trained YOLO model on GPU
 
-# CHANGE PATH, AND ADD .to("cuda") AT THE END TO USE GPU
-        self.model = YOLO("/home/fazal/Documents/dev/phnx_ws/src/ai_model/best.pt")
-        # threshold for skipping small x‐jumps
-        self.x_variation_threshold = 2
-
-        self.get_logger().info("YOLO lane overlay node (with left/right edges + contour publishing) initialized.")
-        cv2.namedWindow("YOLO Edge Overlay", cv2.WINDOW_NORMAL)
+        self.get_logger().info("OpenCV Detection Node Started.")
 
     def image_callback(self, msg):
-        try:
-            # convert ROS Image to BGR OpenCV frame
+        """Process frames from ROS2 topic."""
+        
+        if isinstance(msg, CompressedImage):
+            # Decode compressed
+            np_arr = np.frombuffer(msg.data, np.uint8)
+            frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        else:
+            # Raw Image
             frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-            overlay = frame.copy()
-            height, width = frame.shape[:2]
+        # frame_height, frame_width, _ = frame.shape
 
-            # run inference
-            results = self.model.predict(frame, conf=0.5, verbose=False)[0]
-            if results.masks is None:
-                return
-
-            all_left_vectors = []
-            all_right_vectors = []
-
-            for mask_tensor in results.masks.data:
-                # convert mask tensor to 0/1 mask at full frame size
-                mask = mask_tensor.cpu().numpy()
-                binary_mask = (mask > 0.5).astype(np.uint8)
-                binary_mask = cv2.resize(binary_mask, (width, height), interpolation=cv2.INTER_NEAREST)
-
-                # ─── apply ROI: ignore top 55% ───
-                y_cutoff = int(height * 0.55)
-                cv2.rectangle(binary_mask, (0, 0), (width, y_cutoff), 0, thickness=cv2.FILLED)
-
-                # overlay the remaining mask in red
-                colored_mask = np.zeros_like(frame)
-                for c in range(3):
-                    colored_mask[:, :, c] = binary_mask * (0, 0, 255)[c]
-                overlay = cv2.addWeighted(overlay, 1.0, colored_mask, 0.4, 0)
-
-                # extract left/right edge points from the bottom 45%
-                left_edge_points = []
-                right_edge_points = []
-                y_max_mask = 0
-
-                for y in range(height):
-                    row = binary_mask[y, :]
-                    x_idxs = np.where(row > 0)[0]
-                    if x_idxs.size:
-                        left_edge_points.append((int(x_idxs[0]), y))
-                        right_edge_points.append((int(x_idxs[-1]), y))
-                        y_max_mask = y
-
-                # draw splined edges and store into Vector3 lists
-                self._draw_and_store_edge(
-                    overlay,
-                    left_edge_points,
-                    y_max_mask,
-                    self.x_variation_threshold,
-                    (0, 255, 0),
-                    all_left_vectors
-                )
-                self._draw_and_store_edge(
-                    overlay,
-                    right_edge_points,
-                    y_max_mask,
-                    self.x_variation_threshold,
-                    (255, 0, 0),
-                    all_right_vectors
-                )
-
-            # publish the contours
-            contour_msg = Contours()
-            contour_msg.left_contour = all_left_vectors
-            contour_msg.right_contour = all_right_vectors
-            self.contours_publisher.publish(contour_msg)
-
-            # display the overlay
-            cv2.imshow("YOLO Edge Overlay", overlay)
-            cv2.waitKey(1)
-
-        except Exception as e:
-            self.get_logger().error(f"Error in image_callback: {e}")
-
-    def _draw_and_store_edge(self, image, edge_points, y_max, x_threshold, color, output_vector3_list):
-        if len(edge_points) < 10:
+        height, width, channels = frame.shape
+        # Run CV function
+        poly_data = process_videos(frame)
+        if poly_data is  None:
+            self.get_logger().info("Insufficient contours!")
             return
-        try:
-            pts = np.array(edge_points)
-            x_vals = pts[:, 0]
-            y_vals = pts[:, 1]
+        left_contours = poly_data["left_contours"]
+        right_contours = poly_data["right_contours"]
 
-            # fit a spline and sample smoothly
-            spline = UnivariateSpline(y_vals, x_vals, s=5000)
-            y_smooth = np.linspace(y_vals.min(), y_vals.max(), num=300)
-            y_smooth = y_smooth[y_smooth <= y_max]
-            x_smooth = spline(y_smooth)
+        # flatten contours
+        points_right = []
+        for contour in right_contours:
+            reshaped = contour.reshape(-1, 2)
+            for (x, y) in reshaped:
+                points_right.extend([float(x), float(y)])
+        # flatten contours
+        points_left = []
+        for contour in left_contours:
+            reshaped = contour.reshape(-1, 2)
+            for (x, y) in reshaped:
+                points_left.extend([float(x), float(y)])
+        
+        # make the custom msg and publich coefficients and contours
+        # Process left contours
+        vector3d_left_contours = []
+        if left_contours:
+            for contour in left_contours:
+                reshaped = contour.reshape(-1, 2)  # Convert to Nx2 array
+                for point in reshaped:
+                    vec = Vector3()
+                    vec.x = float(point[0])  # x coordinate
+                    vec.y = float(point[1])  # y coordinate
+                    vec.z = 0.0
+                    vector3d_left_contours.append(vec)
 
-            # draw only significant jumps to avoid noise
-            for i in range(len(x_smooth) - 1):
-                dx = abs(x_smooth[i + 1] - x_smooth[i])
-                if dx < x_threshold:
-                    continue
-                pt1 = (int(x_smooth[i]), int(y_smooth[i]))
-                pt2 = (int(x_smooth[i + 1]), int(y_smooth[i + 1]))
-                cv2.line(image, pt1, pt2, color, 2)
+        # Process right contours (same approach)
+        vector3d_right_contours = []
+        if right_contours:
+            for contour in right_contours:
+                reshaped = contour.reshape(-1, 2)
+                for point in reshaped:
+                    vec = Vector3()
+                    vec.x = float(point[0])
+                    vec.y = float(point[1])
+                    vec.z = 0.0
+                    vector3d_right_contours.append(vec)
 
-            # store for publishing
-            for x, y in zip(x_smooth, y_smooth):
-                vec = Vector3(x=float(x), y=float(y), z=0.0)
-                output_vector3_list.append(vec)
+        msg = Contours()
+        msg.left_contour = vector3d_left_contours
+        msg.right_contour = vector3d_right_contours
 
-        except Exception as e:
-            self.get_logger().warn(f"Spline draw failed: {e}")
+
+        mininium_threshold = 0.05 * height
+
+        # check if the contours are bigger than the threshold\
+        # we take the difference from the point farrest from the upper right corner and 
+        # and the farest point to compare its length with the threshold
+        i = 1
+        dist = 0
+        min_dist = height * width;
+        max_dist = 0.0;
+        while i < len(vector3d_left_contours) -1:
+            vect1 = vector3d_left_contours[i]
+            vect2 = vector3d_left_contours[i-1]
+            dist =  ((vect1.x - vect2.x ) ** 2 + (vect1.y - vect2.y) ** 2 ) ** 0.5
+            if min_dist > dist:
+                min_dist = dist;
+            if max_dist < dist:
+                max_dist = dist;
+            i += 1
+        if abs(max_dist - min_dist) < mininium_threshold:
+            self.get_logger().info("New threshold not met with left")
+            #return
+        i = 1
+        dist = 0
+        while i < len(vector3d_left_contours) -1:
+            # start looper
+            vect1 = vector3d_left_contours[i]
+            vect2 = vector3d_left_contours[i-1]
+            dist +=  ( (vect1.x - vect2.x ) ** 2 + (vect1.y - vect2.y) ** 2 ) ** 0.5
+            i += 1
+        
+        if dist < mininium_threshold:
+            self.get_logger().info("mininium_threshold not met with left")
+            return 
+
+        
+        # checks to see the contours interact with the edge of the screen
+        into_the_edge_check: bool = True;    # flag to trip
+        edge_percentage: float = 0.05;       # error margin for intersecting with the edge
+        # for left edge detection
+        for point in vector3d_left_contours:
+            # check the left edge
+            if point.x < width * edge_percentage:
+                into_the_edge_check = False;
+                break
+            # check the bottom edge
+            if point.y > height * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+            # check the right edge
+            if point.x > width * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+        # for the right edge
+        for point in vector3d_right_contours:
+            if point.x < width * edge_percentage:
+                into_the_edge_check = False;
+                break
+            if point.y > height * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+            if point.x > width * ( 1 - edge_percentage ):
+                into_the_edge_check = False;
+                break
+
+        if into_the_edge_check:
+            self.get_logger().info("fail edge check")
+            return
+        self.get_logger().info("Sucess for node!")
+        self.contours_publisher.publish(msg)
+
+    
+
 
 def main(args=None):
     rclpy.init(args=args)
-    node = CVsubscriberNode()
-    try:
-        rclpy.spin(node)
-    finally:
-        node.destroy_node()
-        cv2.destroyAllWindows()
-        rclpy.shutdown()
+    cv_subscriber_node = CVsubscriberNode()
+    rclpy.spin(cv_subscriber_node)
+    cv_subscriber_node.destroy_node()
+    rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

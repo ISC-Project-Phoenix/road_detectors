@@ -16,8 +16,8 @@
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>cv_bridge</depend>
-  <depend>opencv-python</depend>
-  <depend>ultralytics</depend>
+  <depend>python3-opencv</depend>
+  <depend>python3-ultralytics-pip</depend>
   <depend>python3-numpy</depend>
   <depend>image_transport</depend>
   <depend>phnx_msgs</depend>

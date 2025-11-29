@@ -18,7 +18,7 @@
   <depend>cv_bridge</depend>
   <depend>opencv-python</depend>
   <depend>ultralytics</depend>
-  <depend>numpy</depend>
+  <depend>python3-numpy</depend>
   <depend>image_transport</depend>
   <depend>phnx_msgs</depend>
   <depend>geometry_msgs</depend>
